@@ -1,6 +1,6 @@
 # 🧠 ClickHouse Observability Platform (Terraform Phase)
 
-This project provisions foundational AWS infrastructure for a real-time OLAP observability stack using **modular Terraform**. It is part of a larger initiative to simulate SaaS-style GitOps and telemetry ingestion pipelines for ClickHouse.
+This repository contains Terraform code for provisioning a production-grade AWS EKS cluster with modular VPC, IAM, and Kubernetes components. It serves as the foundational infrastructure for deploying ClickHouse, Grafana, Tempo, and related observability tools.
 
 ---
 
@@ -8,18 +8,25 @@ This project provisions foundational AWS infrastructure for a real-time OLAP obs
 
 ```
 .
-├── README.md                     # This file
-└── terraform/
-    ├── environments/
-    │   └── dev/
-    │       ├── main.tf           # Root module for the dev environment
-    │       ├── outputs.tf        # Re-exports values from VPC module
-    │       └── variables.tf      # Input values for the dev environment
-    └── modules/
-        └── vpc/
-            ├── main.tf           # Provisions VPC, subnets, NAT, IGW
-            ├── outputs.tf        # VPC outputs (vpc_id, subnets)
-            └── variables.tf      # Configurable inputs (CIDR, AZ count, tags)
+├── README.md
+└── terraform
+    ├── environments
+    │   └── dev
+    │       ├── eks.tf               # Wires in EKS module and node group config
+    │       ├── iam.tf               # IAM roles and policy attachments for EKS and nodegroups
+    │       ├── outputs.tf           # Outputs for cluster name, endpoint, etc.
+    │       ├── providers.tf         # AWS provider configuration
+    │       ├── variables.tf         # Environment-specific variables
+    │       └── vpc.tf               # Wires in VPC module
+    └── modules
+        ├── eks
+        │   ├── main.tf              # EKS cluster, nodegroup, and Fargate profile
+        │   ├── outputs.tf           # Exposes cluster name, endpoint, and Fargate details
+        │   └── variables.tf         # Input variables for eks module
+        └── vpc
+            ├── main.tf              # VPC, subnets, NAT gateways, route tables
+            ├── outputs.tf           # Exposes subnet and VPC IDs
+            └── variables.tf         # Input variables for vpc module
 ```
 
 ---
@@ -68,3 +75,6 @@ You will see:
 - `vpc_id`
 - `public_subnet_ids`
 - `private_subnet_ids`
+- `eks_cluster_name`
+- `eks_cluster_endpoint`
+- `fargate_profile_name`
