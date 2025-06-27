@@ -21,3 +21,11 @@ output "eks_cluster_endpoint" {
 output "fargate_profile_name" {
   value = module.eks.fargate_profile_name
 }
+
+output "argocd_server_url" {
+  value = module.argocd.argocd_server_url
+}
+
+output "argocd_admin_password_cmd" {
+  value = module.argocd.argocd_admin_password_cmd
+}

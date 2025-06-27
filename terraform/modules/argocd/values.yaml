@@ -1,0 +1,7 @@
+configs:
+  params:
+    server.insecure: true  # Allows access without TLS (good for local dev)
+
+server:
+  service:
+    type: LoadBalancer  # Or use ClusterIP if using port-forward

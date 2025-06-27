@@ -1,6 +1,6 @@
 # 🧠 ClickHouse Observability Platform (Terraform Phase)
 
-This repository contains Terraform code for provisioning a production-grade AWS EKS cluster with modular VPC, IAM, and Kubernetes components. It serves as the foundational infrastructure for deploying ClickHouse, Grafana, Tempo, and related observability tools.
+This repository contains Terraform code for provisioning a production-ready AWS EKS environment to support a real-time observability platform built on ClickHouse, Grafana, Tempo, Loki, and Alloy. It serves as the infrastructure foundation for a GitOps-managed data and telemetry stack.
 
 ---
 
@@ -17,12 +17,17 @@ This repository contains Terraform code for provisioning a production-grade AWS 
     │       ├── outputs.tf           # Outputs for cluster name, endpoint, etc.
     │       ├── providers.tf         # AWS provider configuration
     │       ├── variables.tf         # Environment-specific variables
-    │       └── vpc.tf               # Wires in VPC module
+    │       ├── vpc.tf             # VPC module wiring (subnets, routes, NAT, etc.)
+    │       └── argocd.tf          # Argo CD GitOps deployment module
     └── modules
         ├── eks
         │   ├── main.tf              # EKS cluster, nodegroup, and Fargate profile
         │   ├── outputs.tf           # Exposes cluster name, endpoint, and Fargate details
         │   └── variables.tf         # Input variables for eks module
+        ├── argocd
+        │   ├── main.tf              # Argo CD Helm release and namespace setup
+        │   ├── outputs.tf           # Admin login command, UI endpoint
+        │   ├── values.yaml          # Argo CD config (insecure HTTP mode for local dev)
         └── vpc
             ├── main.tf              # VPC, subnets, NAT gateways, route tables
             ├── outputs.tf           # Exposes subnet and VPC IDs
@@ -31,17 +36,21 @@ This repository contains Terraform code for provisioning a production-grade AWS 
 
 ---
 
-## 🚀 What This Phase Does
+## 🚀 Infrastructure Provisioning
 
 This portion of the project provisions:
 
-- A **multi-AZ VPC** with:
-  - Public and private subnets
-  - Route tables and associations
-  - Internet Gateway (IGW)
-  - NAT Gateway(s) with EIPs
-- Output values used by later phases (e.g., EKS, observability stack)
+This Terraform stack provisions:
 
+- A highly-available VPC:
+  - Public and private subnets across AZs 
+  - Route tables, IGW, and NAT Gateways
+- An Amazon EKS cluster with:
+  - Managed node groups and optional Fargate profiles 
+  - IAM roles scoped for Kubernetes workloads
+- A GitOps control plane using Argo CD, installed via Helm and Terraform 
+  - Exposed locally via port-forwarding 
+  - Configured in HTTP mode for development convenience
 ---
 
 ## 🛠️ Usage Instructions
@@ -78,3 +87,5 @@ You will see:
 - `eks_cluster_name`
 - `eks_cluster_endpoint`
 - `fargate_profile_name`
+- `argocd_admin_password_cmd`
+- `argocd_server_url`
