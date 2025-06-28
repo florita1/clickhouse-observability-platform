@@ -8,30 +8,42 @@ This repository contains Terraform code for provisioning a production-ready AWS 
 
 ```
 .
+clickhouse-observability-platform/
 ├── README.md
-└── terraform
-    ├── environments
-    │   └── dev
-    │       ├── eks.tf               # Wires in EKS module and node group config
-    │       ├── iam.tf               # IAM roles and policy attachments for EKS and nodegroups
-    │       ├── outputs.tf           # Outputs for cluster name, endpoint, etc.
-    │       ├── providers.tf         # AWS provider configuration
-    │       ├── variables.tf         # Environment-specific variables
-    │       ├── vpc.tf             # VPC module wiring (subnets, routes, NAT, etc.)
-    │       └── argocd.tf          # Argo CD GitOps deployment module
-    └── modules
-        ├── eks
-        │   ├── main.tf              # EKS cluster, nodegroup, and Fargate profile
-        │   ├── outputs.tf           # Exposes cluster name, endpoint, and Fargate details
-        │   └── variables.tf         # Input variables for eks module
-        ├── argocd
-        │   ├── main.tf              # Argo CD Helm release and namespace setup
-        │   ├── outputs.tf           # Admin login command, UI endpoint
-        │   ├── values.yaml          # Argo CD config (insecure HTTP mode for local dev)
-        └── vpc
-            ├── main.tf              # VPC, subnets, NAT gateways, route tables
-            ├── outputs.tf           # Exposes subnet and VPC IDs
-            └── variables.tf         # Input variables for vpc module
+├── apps/                            # Argo CD Application manifests
+│   └── clickhouse.yaml              # GitOps app for ClickHouse via Helm
+├── helm/                            # Helm charts for internal components
+│   └── clickhouse/                  # Minimal ClickHouse Helm chart
+│       ├── Chart.yaml
+│       ├── values.yaml
+│       └── templates/
+│           ├── deployment.yaml
+│           └── service.yaml
+└── terraform/                       # Full infrastructure-as-code
+    ├── environments/
+    │   └── dev/                     # Environment-specific config
+    │       ├── apps.tf             # Argo CD Application resource via TF
+    │       ├── argocd.tf           # Argo CD Helm release
+    │       ├── eks.tf              # EKS cluster and node group wiring
+    │       ├── iam.tf              # IAM roles and IRSA setup
+    │       ├── outputs.tf          # Cluster and app outputs
+    │       ├── providers.tf        # AWS, K8s, Helm provider setup
+    │       ├── variables.tf
+    │       └── vpc.tf              # VPC module wiring
+    └── modules/                    # Reusable Terraform modules
+        ├── argocd/
+        │   ├── main.tf
+        │   ├── outputs.tf
+        │   └── values.yaml
+        ├── eks/
+        │   ├── main.tf
+        │   ├── outputs.tf
+        │   └── variables.tf
+        └── vpc/
+            ├── main.tf
+            ├── outputs.tf
+            └── variables.tf
+
 ```
 
 ---
@@ -51,6 +63,7 @@ This Terraform stack provisions:
 - A GitOps control plane using Argo CD, installed via Helm and Terraform 
   - Exposed locally via port-forwarding 
   - Configured in HTTP mode for development convenience
+- Deploys ClickHouse via Argo CD as a Helm chart, with full GitOps lifecycle management
 ---
 
 ## 🛠️ Usage Instructions
@@ -89,3 +102,23 @@ You will see:
 - `fargate_profile_name`
 - `argocd_admin_password_cmd`
 - `argocd_server_url`
+
+## 🔗 Access Argo CD UI Locally
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:80
+```
+Then visit:
+
+http://localhost:8080
+
+Retrieve the admin password:
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+```
+## 📡 Access ClickHouse Locally
+```bash
+kubectl port-forward svc/clickhouse -n clickhouse 8123:8123
+```
+Then open:
+
+http://localhost:8123
