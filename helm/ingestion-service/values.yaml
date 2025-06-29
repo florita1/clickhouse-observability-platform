@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: florita1/ingestion-service
+  repository: ghcr.io/florita1/ingestion-service
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP
