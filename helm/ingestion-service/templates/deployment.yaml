@@ -14,8 +14,6 @@ spec:
       labels:
         app: ingestion-service
     spec:
-      imagePullSecrets:
-        - name: ghcr-creds
       containers:
         - name: ingestion-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

@@ -29,3 +29,4 @@ output "argocd_server_url" {
 output "argocd_admin_password_cmd" {
   value = module.argocd.argocd_admin_password_cmd
 }
+
