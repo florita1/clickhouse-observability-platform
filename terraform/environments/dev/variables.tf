@@ -12,3 +12,8 @@ variable "tags" {
     Env     = "dev"
   }
 }
+
+variable "clickhouse_password" {
+  type      = string
+  sensitive = true
+}

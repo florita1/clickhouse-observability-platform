@@ -11,6 +11,7 @@ service:
 
 env:
   clickhouseHost: clickhouse.clickhouse.svc.cluster.local
+  clickhouseUser: default
 
 resources:
   requests:
