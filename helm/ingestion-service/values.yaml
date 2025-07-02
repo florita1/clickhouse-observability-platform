@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: docker.io/florita1/ingestion-service
+  repository: ghcr.io/florita1/ingestion-service
   tag: latest
   pullPolicy: Always
 
