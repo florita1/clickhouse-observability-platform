@@ -22,9 +22,9 @@ spec:
             - containerPort: {{ .Values.service.port }}
           env:
             - name: CLICKHOUSE_HOST
-              value: { { .Values.env.clickhouseHost } }
+              value: {{ .Values.env.clickhouseHost }}
             - name: CLICKHOUSE_USER
-              value: { { .Values.env.clickhouseUser } }
+              value: {{ .Values.env.clickhouseUser }}
             - name: CLICKHOUSE_PASSWORD
               valueFrom:
                 secretKeyRef:
