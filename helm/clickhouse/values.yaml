@@ -11,8 +11,12 @@ image:
 service:
   type: ClusterIP
   ports:
-    http: 8123
-    tcp: 9000
+    - name: http
+      port: 8123
+      targetPort: http
+    - name: tcp
+      port: 9000
+      targetPort: tcp
 
 resources:
   requests:
