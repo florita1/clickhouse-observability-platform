@@ -8,7 +8,7 @@ data:
     <yandex>
       <users>
         <default>
-          <password_sha256_hex>$(echo -n 'clickhouse' | sha256sum | awk '{print $1}')</password_sha256_hex>
+          <password_sha256_hex>8387e15c17bfe73e58d0e1c0592ae5a4e0a9e3fc6c57d093656f53ae3d75b8da</password_sha256_hex>
           <networks>
             <ip>::/0</ip>
           </networks>
