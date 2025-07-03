@@ -22,11 +22,3 @@ spec:
             - containerPort: 8123
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: users-config
-              mountPath: /etc/clickhouse-server/users.xml
-              subPath: users.xml
-      volumes:
-        - name: users-config
-          configMap:
-            name: clickhouse-users-config

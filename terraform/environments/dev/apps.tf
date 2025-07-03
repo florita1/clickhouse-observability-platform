@@ -1,28 +1,21 @@
-resource "kubernetes_manifest" "clickhouse_app" {
-  manifest = yamldecode(file("${path.module}/../../../apps/clickhouse.yaml"))
+resource "kubernetes_namespace" "clickhouse" {
+  metadata {
+    name = "clickhouse"
+  }
 }
 
-resource "null_resource" "clickhouse_init" {
-  depends_on = [kubernetes_manifest.clickhouse_app]
+resource "helm_release" "clickhouse" {
+  name       = "clickhouse"
+  namespace  = kubernetes_namespace.clickhouse.metadata[0].name
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "clickhouse"
+  version    = "5.1.2"
 
-  provisioner "local-exec" {
-    command = <<EOT
-      kubectl run clickhouse-init-job --rm -i --tty --restart=Never \
-        --image=curlimages/curl -n clickhouse -- \
-        sh -c "echo '${file("${path.module}/../../../scripts/init_clickhouse.sql")}' | \
-          curl -sS -u ${var.clickhouse_user}:${var.clickhouse_password} \
-          -X POST http://clickhouse.clickhouse.svc.cluster.local:8123 --data-binary @-"
-    EOT
+  values = [
+    file("${path.module}/../../helm/clickhouse/values.yaml")
+  ]
 
-    environment = {
-      CLICKHOUSE_USER     = var.clickhouse_user
-      CLICKHOUSE_PASSWORD = var.clickhouse_password
-    }
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
+  depends_on = [kubernetes_namespace.clickhouse]
 }
 
 resource "kubernetes_manifest" "ingestion_service_app" {
