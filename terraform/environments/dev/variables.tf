@@ -13,7 +13,14 @@ variable "tags" {
   }
 }
 
+variable "clickhouse_user" {
+  description = "ClickHouse username used for authentication"
+  type        = string
+  default     = "default"
+}
+
 variable "clickhouse_password" {
-  type      = string
-  sensitive = true
+  description = "ClickHouse password used for authentication"
+  type        = string
+  sensitive   = true
 }
