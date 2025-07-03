@@ -21,6 +21,4 @@ persistence:
   enabled: false
 
 auth:
-  enabled: true
-  username: default
-  password: clickhouse
+  enabled: false
