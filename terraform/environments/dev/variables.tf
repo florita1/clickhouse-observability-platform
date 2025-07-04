@@ -12,15 +12,3 @@ variable "tags" {
     Env     = "dev"
   }
 }
-
-variable "clickhouse_user" {
-  description = "ClickHouse username used for authentication"
-  type        = string
-  default     = "default"
-}
-
-variable "clickhouse_password" {
-  description = "ClickHouse password used for authentication"
-  type        = string
-  sensitive   = true
-}

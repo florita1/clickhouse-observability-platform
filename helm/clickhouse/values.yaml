@@ -1,22 +1,13 @@
-auth:
-  enabled: true
-  username: default
-  password: clickhouse
+replicaCount: 1
 
 image:
-  repository: docker.io/bitnami/clickhouse
+  repository: clickhouse/clickhouse-server
   tag: latest
   pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
-  ports:
-    - name: http
-      port: 8123
-      targetPort: http
-    - name: tcp
-      port: 9000
-      targetPort: tcp
+  port: 8123
 
 resources:
   requests:
