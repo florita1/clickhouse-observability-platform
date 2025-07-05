@@ -7,11 +7,12 @@ variable "az_count" {
 }
 
 variable "tags" {
+  type    = map(string)
   default = {
-    Project = "clickhouse-observability"
-    Env     = "dev"
+    Environment = "dev"
   }
 }
+
 
 variable "clickhouse_password" {
   type      = string

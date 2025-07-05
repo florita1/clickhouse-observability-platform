@@ -14,6 +14,7 @@ variable "fargate_pod_execution_role_arn" {
   type = string
 }
 
-variable "private_subnet_ids" {
+variable "public_subnet_ids" {
   type = list(string)
+  description = "List of public subnet IDs to be used for EKS cluster, nodes, and Fargate profiles"
 }

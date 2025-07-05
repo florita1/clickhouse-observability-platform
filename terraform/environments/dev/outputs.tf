@@ -6,21 +6,18 @@ output "public_subnet_ids" {
   value = module.vpc.public_subnet_ids
 }
 
-output "private_subnet_ids" {
-  value = module.vpc.private_subnet_ids
-}
-
-output "eks_cluster_name" {
+output "cluster_name" {
   value = module.eks.cluster_name
 }
 
-output "eks_cluster_endpoint" {
+output "cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
 
 output "fargate_profile_name" {
   value = module.eks.fargate_profile_name
 }
+
 
 output "argocd_server_url" {
   value = module.argocd.argocd_server_url

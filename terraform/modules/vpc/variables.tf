@@ -1,17 +1,12 @@
 variable "vpc_cidr" {
-  type    = string
-  default = "10.0.0.0/16"
+  type = string
 }
 
 variable "az_count" {
   type    = number
-  default = 3
+  default = 2
 }
 
 variable "tags" {
-  type    = map(string)
-  default = {
-    Project = "clickhouse-observability"
-    Env     = "dev"
-  }
+  type = map(string)
 }
