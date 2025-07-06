@@ -15,3 +15,24 @@ provider "helm" {
     config_path = "~/.kube/config"
   }
 }
+
+terraform {
+  required_providers {
+    clickhousedbops = {
+      version = "1.1.0"
+      source  = "ClickHouse/clickhousedbops"
+    }
+  }
+}
+
+provider "clickhousedbops" {
+  host     = var.clickhouse_host
+  port     = 9000
+  protocol = "native"
+
+  auth_config = {
+    strategy = "password"
+    username = var.clickhouse_admin_user
+    password = var.clickhouse_admin_password
+  }
+}

@@ -13,8 +13,26 @@ variable "tags" {
   }
 }
 
+variable "clickhouse_host" {
+  description = "Public or internal hostname of ClickHouse"
+  type        = string
+  default     = "clickhouse.clickhouse.svc.cluster.local"
+}
 
-variable "clickhouse_password" {
-  type      = string
-  sensitive = true
+variable "clickhouse_admin_user" {
+  type    = string
+  default = "default"
+}
+
+variable "clickhouse_admin_password" {
+  type = string
+}
+
+variable "clickhouse_ingestor_user" {
+  type = string
+  default = "ingestor"
+}
+
+variable "clickhouse_ingestor_password" {
+  type = string
 }
