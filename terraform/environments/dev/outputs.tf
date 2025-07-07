@@ -14,9 +14,9 @@ output "cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
 
-output "fargate_profile_name" {
-  value = module.eks.fargate_profile_name
-}
+# output "fargate_profile_name" {
+#   value = module.eks.fargate_profile_name
+# }
 
 output "argocd_server_url" {
   value = module.argocd.argocd_server_url

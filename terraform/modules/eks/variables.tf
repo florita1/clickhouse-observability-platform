@@ -10,9 +10,9 @@ variable "node_group_role_arn" {
   type = string
 }
 
-variable "fargate_pod_execution_role_arn" {
-  type = string
-}
+# variable "fargate_pod_execution_role_arn" {
+#   type = string
+# }
 
 variable "public_subnet_ids" {
   type = list(string)
