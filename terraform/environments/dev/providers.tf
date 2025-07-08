@@ -35,4 +35,5 @@ provider "clickhousedbops" {
     username = var.clickhouse_admin_user
     password = var.clickhouse_admin_password
   }
+
 }
