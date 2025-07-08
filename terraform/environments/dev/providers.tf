@@ -27,11 +27,11 @@ terraform {
 
 provider "clickhousedbops" {
   host     = var.clickhouse_host
-  port     = 9000
-  protocol = "native"
+  port     = 8123
+  protocol = "http"
 
   auth_config = {
-    strategy = "password"
+    strategy = "basicauth"
     username = var.clickhouse_admin_user
     password = var.clickhouse_admin_password
   }
