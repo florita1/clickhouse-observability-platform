@@ -22,3 +22,4 @@ persistence:
 
 users:
   default/password: mysecuredefaultpass
+  terraform/password: terraformpass123

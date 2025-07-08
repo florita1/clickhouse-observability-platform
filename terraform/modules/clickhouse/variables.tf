@@ -31,7 +31,7 @@ variable "clickhouse_host" {
 variable "admin_user" {
   description = "Admin username for ClickHouse"
   type        = string
-  default     = "default"
+  default     = "terraform"
 }
 
 variable "admin_password" {
