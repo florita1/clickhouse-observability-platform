@@ -21,7 +21,4 @@ persistence:
   enabled: false
 
 users:
-  myadmin:
-    password: "secure-password"
-    profile: default
-    quota: default
+  default/password: mysecuredefaultpass
