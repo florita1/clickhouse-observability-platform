@@ -4,20 +4,15 @@ metadata:
   name: clickhouse
   namespace: argocd
 spec:
-  project: default
-  source:
-    repoURL: https://charts.altinity.com
-    chart: clickhouse
-    targetRevision: 0.1.12
-    helm:
-      valueFiles:
-        - values/clickhouse-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: clickhouse
+  project: default
+  source:
+    repoURL: https://github.com/florita1/clickhouse-observability-platform.git
+    targetRevision: HEAD
+    path: k8s/clickhouse
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true

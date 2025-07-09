@@ -1,0 +1,77 @@
+apiVersion: "clickhouse.altinity.com/v1"
+kind: "ClickHouseInstallation"
+metadata:
+  name: clickhouse
+  namespace: clickhouse
+spec:
+  defaults:
+    templates:
+      podTemplate: clickhouse-default-pod-template
+      dataVolumeClaimTemplate: clickhouse-default-volume-template
+
+  configuration:
+    users:
+      default/password: mysecuredefaultpass
+
+      terraform/password: terraformpass123
+      terraform/profile: default
+      terraform/quota: default
+
+    clusters:
+      - name: clickhouse
+        layout:
+          shardsCount: 1
+          replicasCount: 1
+        templates:
+          podTemplate: clickhouse-default-pod-template
+          dataVolumeClaimTemplate: clickhouse-default-volume-template
+        services:
+          - name: clickhouse
+            port: 8123
+            protocol: HTTP
+            template: default
+            spec:
+              type: LoadBalancer
+
+    profiles:
+      default:
+        # Add any CPU/memory/disk tuning if needed
+        readonly: 0
+
+    quotas:
+      default:
+        intervals:
+          - duration: 3600
+            queries: 0
+            errors: 0
+            result_rows: 0
+            read_rows: 0
+            execution_time: 0
+
+  templates:
+    podTemplates:
+      - name: clickhouse-default-pod-template
+        podDistribution:
+          - type: Shard
+        spec:
+          containers:
+            - name: clickhouse
+              image: clickhouse/clickhouse-server:23.8
+              ports:
+                - containerPort: 8123
+                  name: http
+              resources:
+                requests:
+                  memory: "512Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "1Gi"
+                  cpu: "500m"
+
+    dataVolumeClaimTemplates:
+      - name: clickhouse-default-volume-template
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi

@@ -21,7 +21,7 @@ variable "clickhouse_host" {
 
 variable "clickhouse_admin_user" {
   type    = string
-  default = "default"
+  default = "terraform"
 }
 
 variable "clickhouse_admin_password" {
