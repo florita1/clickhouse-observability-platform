@@ -32,10 +32,13 @@ spec:
             template: default
             spec:
               type: LoadBalancer
+        settings:
+          storage:
+            - name: clickhouse-default-volume-template
+              path: /var/lib/clickhouse
 
     profiles:
       default:
-        # Add any CPU/memory/disk tuning if needed
         readonly: 0
 
     quotas:
@@ -72,6 +75,7 @@ spec:
     dataVolumeClaimTemplates:
       - name: clickhouse-default-volume-template
         spec:
+          storageClassName: gp2
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
