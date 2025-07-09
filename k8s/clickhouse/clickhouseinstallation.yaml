@@ -51,8 +51,6 @@ spec:
   templates:
     podTemplates:
       - name: clickhouse-default-pod-template
-        podDistribution:
-          - type: Shard
         spec:
           containers:
             - name: clickhouse
