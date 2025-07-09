@@ -65,6 +65,9 @@ spec:
                 limits:
                   memory: "1Gi"
                   cpu: "500m"
+              volumeMounts:
+                - name: clickhouse-default-volume-template
+                  mountPath: /var/lib/clickhouse
 
     dataVolumeClaimTemplates:
       - name: clickhouse-default-volume-template
