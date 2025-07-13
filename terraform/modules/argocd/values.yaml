@@ -5,3 +5,6 @@ configs:
 server:
   service:
     type: LoadBalancer  # Or use ClusterIP if using port-forward
+  containerPorts:
+    http: 8080
+    metrics: 8083

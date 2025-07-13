@@ -26,7 +26,7 @@ terraform {
 }
 
 provider "clickhousedbops" {
-  host     = var.clickhouse_lb_host
+  host     = "localhost"
   port     = 8123
   protocol = "http"
 

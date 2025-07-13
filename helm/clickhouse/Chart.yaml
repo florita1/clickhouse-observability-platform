@@ -1,4 +1,0 @@
-apiVersion: v2
-name: clickhouse
-version: 0.1.0
-description: A basic ClickHouse Helm chart for GitOps-managed deployment
