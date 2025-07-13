@@ -7,6 +7,10 @@ spec:
   configuration:
     users:
       terraform/password: terraformpass123
+      terraform/profile: default
+      terraform/quota: default
+      terraform/grants: |
+        GRANT ALL ON *.* TO terraform WITH GRANT OPTION
 
     clusters:
       - name: clickhouse

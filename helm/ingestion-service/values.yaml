@@ -10,7 +10,7 @@ service:
   port: 8080
 
 env:
-  clickhouseHost: chi-clickhouse-clickhouse-0-0.clickhouse.svc.cluster.local
+  clickhouseHost: chi-clickhouse-clickhouse.clickhouse.svc.cluster.local
   clickhouseUser: ingestor
 
 resources:
