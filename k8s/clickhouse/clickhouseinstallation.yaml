@@ -11,7 +11,7 @@ spec:
       terraform/profile: default
       terraform/quota: default
       terraform/grants: |
-        GRANT ALL ON *.* TO terraform WITH GRANT OPTION
+        GRANT CREATE DATABASE, CREATE TABLE, INSERT, SELECT, ALTER, DROP, SHOW, SYSTEM, ACCESS MANAGEMENT ON *.* TO terraform WITH GRANT OPTION
 
     clusters:
       - name: clickhouse
