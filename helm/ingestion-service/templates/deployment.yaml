@@ -1,19 +1,16 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: ingestion-service
   labels:
     app: ingestion-service
 spec:
-  replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      app: ingestion-service
   template:
     metadata:
       labels:
         app: ingestion-service
     spec:
+      restartPolicy: Never
       containers:
         - name: ingestion-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
