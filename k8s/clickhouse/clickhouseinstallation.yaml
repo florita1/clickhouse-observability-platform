@@ -7,13 +7,12 @@ spec:
   configuration:
     users:
       terraform/password: terraformpass123
-      terraform/profile: default
+      terraform/profile: "clickhouse_operator"
       terraform/quota: default
+      terraform/access_management: "1"
       terraform/networks/ip.1: "::1"
       terraform/networks/ip.2: "127.0.0.1"
       terraform/networks/ip.3: "10.0.0.0/8"
-      terraform/grants/query: |
-        GRANT ALL ON *.* TO terraform WITH GRANT OPTION
 
     clusters:
       - name: clickhouse
