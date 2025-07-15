@@ -7,11 +7,11 @@ spec:
   configuration:
     users:
       terraform/password: terraformpass123
-      terraform/networks/ip: "::/0"
+      terraform/networks/ip: 10.0.0.0/8
       terraform/profile: default
       terraform/quota: default
       terraform/grants: |
-        GRANT CREATE DATABASE, CREATE TABLE, INSERT, SELECT, ALTER, DROP, SHOW, SYSTEM, ACCESS MANAGEMENT ON *.* TO terraform WITH GRANT OPTION
+        GRANT ALL ON *.* TO terraform WITH GRANT OPTION
 
     clusters:
       - name: clickhouse
