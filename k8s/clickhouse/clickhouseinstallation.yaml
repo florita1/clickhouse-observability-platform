@@ -7,10 +7,10 @@ spec:
   configuration:
     users:
       terraform/password: terraformpass123
-      terraform/networks/ip: 10.0.0.0/8
       terraform/profile: default
       terraform/quota: default
-      terraform/grants: |
+      terraform/networks/ip: "::1,127.0.0.1,10.0.0.0/8"
+      terraform/grants/query: |
         GRANT ALL ON *.* TO terraform WITH GRANT OPTION
 
     clusters:
