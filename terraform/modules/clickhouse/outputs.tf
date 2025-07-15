@@ -10,6 +10,6 @@ output "clickhouse_role" {
   value = clickhousedbops_role.role.name
 }
 
-output "wait_for_clickhouse" {
-  value = null_resource.wait_for_clickhouse
-}
+# output "wait_for_clickhouse" {
+#   value = null_resource.wait_for_clickhouse
+# }

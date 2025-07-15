@@ -16,7 +16,7 @@ variable "tags" {
 variable "clickhouse_host" {
   description = "Public or internal hostname of ClickHouse"
   type        = string
-  default     = "clickhouse.clickhouse.svc.cluster.local"
+  default     = "clickhouse-clickhouse.clickhouse.svc.cluster.local"
 }
 
 variable "clickhouse_admin_user" {
