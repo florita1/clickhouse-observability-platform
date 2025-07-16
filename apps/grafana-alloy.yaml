@@ -6,9 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/florita1/clickhouse-observability-platform.git
-    targetRevision: HEAD
-    path: helm/grafana-alloy
+    repoURL: https://grafana.github.io/helm-charts
+    chart: alloy
+    targetRevision: 0.2.1
+    helm:
+      valueFiles:
+        - helm/grafana-alloy/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
