@@ -10,8 +10,26 @@ spec:
     chart: alloy
     targetRevision: 1.1.2
     helm:
-      valueFiles:
-        - helm/grafana-alloy/values.yaml
+      values: |
+        configMap:
+          alloy.yaml: |
+            server:
+              log_level: info
+              http_listen_address: 0.0.0.0
+              http_listen_port: 12345
+
+            discovery.kubernetes:
+              - role: node
+              - role: pod
+              - role: service
+
+            prometheus.scrape:
+              - targets:
+                  - localhost:9100
+                job_name: "node_exporter"
+
+            prometheus.remote_write:
+              - endpoint: http://prometheus.monitoring.svc.cluster.local:9090/api/v1/write
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
