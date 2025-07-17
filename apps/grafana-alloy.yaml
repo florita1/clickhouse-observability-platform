@@ -30,6 +30,25 @@ spec:
 
             prometheus.remote_write:
               - endpoint: http://prometheus.monitoring.svc.cluster.local:9090/api/v1/write
+
+            otelcol.receiver.otlp:
+              protocols:
+                http:
+                grpc:
+
+            otelcol.exporter.otlphttp:
+              endpoint: http://tempo.observability.svc.cluster.local:4318
+              tls:
+                insecure: true
+
+            otelcol.processor.batch: {}
+
+            otelcol.service:
+              pipelines:
+                traces:
+                  receivers: [otlp]
+                  processors: [batch]
+                  exporters: [otlphttp]
   destination:
     server: https://kubernetes.default.svc
     namespace: observability

@@ -12,6 +12,7 @@ service:
 env:
   clickhouseHost: clickhouse-clickhouse.clickhouse.svc.cluster.local
   clickhouseUser: ingestor
+  otelExporterOtlpEndpoint: http://grafana-alloy.observability.svc.cluster.local:4318
 
 resources:
   requests:
