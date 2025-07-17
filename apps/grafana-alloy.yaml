@@ -49,6 +49,13 @@ spec:
                   receivers: [otlp]
                   processors: [batch]
                   exporters: [otlphttp]
+
+        service:
+          extraPorts:
+            - name: otlp-http
+              port: 4318
+              targetPort: 4318
+              protocol: TCP
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
