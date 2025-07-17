@@ -5,19 +5,24 @@ metadata:
   namespace: argocd
 spec:
   project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
   source:
     repoURL: https://grafana.github.io/helm-charts
     chart: alloy
     targetRevision: 1.1.2
     helm:
       values: |
-        extraPorts:
-          - name: otlp-http
-            port: 4318
-            targetPort: 4318
-            protocol: TCP
+        service:
+          extraPorts:
+            - name: otlp-http
+              port: 4318
+              targetPort: 4318
+              protocol: TCP
 
         configMap:
+          create: true
           alloy.yaml: |
             server:
               log_level: info
@@ -55,11 +60,7 @@ spec:
                   receivers: [otlp]
                   processors: [batch]
                   exporters: [otlphttp]
-
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: observability
   syncPolicy:
     automated:
-      prune: true
       selfHeal: true
+      prune: true
