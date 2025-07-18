@@ -24,6 +24,8 @@ spec:
         prometheus:
           service:
             type: ClusterIP
+          prometheusSpec:
+            affinity: {}
   syncPolicy:
     automated:
       selfHeal: true
