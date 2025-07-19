@@ -15,6 +15,9 @@ spec:
     helm:
       releaseName: prometheus
       values: |
+        crds:
+          enabled: true
+
         grafana:
           enabled: false
 
@@ -26,6 +29,12 @@ spec:
             type: ClusterIP
           prometheusSpec:
             affinity: {}
+
+        nodeExporter:
+          enabled: true
+
+        kubeStateMetrics:
+          enabled: true
   syncPolicy:
     automated:
       selfHeal: true
