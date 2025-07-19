@@ -11,7 +11,7 @@ spec:
       app: ingestion-service
   namespaceSelector:
     matchNames:
-      - observability
+      - ingestion
   endpoints:
     - port: http
       path: /metrics
