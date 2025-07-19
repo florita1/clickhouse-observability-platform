@@ -4,7 +4,7 @@ metadata:
   name: ingestion-service
   namespace: observability
   labels:
-    release: kube-prometheus-stack
+    release: prometheus
 spec:
   selector:
     matchLabels:
