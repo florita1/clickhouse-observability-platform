@@ -31,6 +31,7 @@ spec:
                 type: loki
                 access: proxy
                 url: http://loki.observability.svc.cluster.local:3100
+                isDefault: false
 
               - name: Tempo
                 type: tempo
