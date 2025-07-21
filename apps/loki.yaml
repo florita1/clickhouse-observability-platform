@@ -11,12 +11,11 @@ spec:
     targetRevision: 6.32.0
     helm:
       values: |
+        deploymentMode: "SingleBinary"
+
         loki:
           auth_enabled: false
           isDefault: true
-          ingester:
-            wal:
-              enabled: true
           storage:
             type: filesystem
           persistence:
