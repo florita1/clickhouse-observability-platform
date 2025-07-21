@@ -30,8 +30,7 @@ spec:
           storage:
             type: filesystem
           persistence:
-            enabled: true
-            size: 10Gi
+            enabled: false
           serviceMonitor:
             enabled: true
           resources:
