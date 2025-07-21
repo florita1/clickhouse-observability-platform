@@ -11,25 +11,26 @@ spec:
     targetRevision: 6.32.0
     helm:
       values: |
-        auth_enabled: false
-        isDefault: true
-        ingester:
-          wal:
+        loki:
+          auth_enabled: false
+          isDefault: true
+          ingester:
+            wal:
+              enabled: true
+          storage:
+            type: filesystem
+          persistence:
             enabled: true
-        storage:
-          type: filesystem
-        persistence:
-          enabled: true
-          size: 10Gi
-        serviceMonitor:
-          enabled: true
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
+            size: 10Gi
+          serviceMonitor:
+            enabled: true
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
