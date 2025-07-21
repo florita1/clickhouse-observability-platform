@@ -12,8 +12,10 @@ spec:
     helm:
       values: |
         deploymentMode: "SingleBinary"
+
         singleBinary:
           replicas: 1
+
         backend:
           replicas: 0
         read:
@@ -21,7 +23,7 @@ spec:
         write:
           replicas: 0
 
-    loki:
+        loki:
           auth_enabled: false
           isDefault: true
           storage:
