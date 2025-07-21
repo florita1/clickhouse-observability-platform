@@ -25,6 +25,7 @@ spec:
 
         loki:
           auth_enabled: false
+          useTestSchema: true
           isDefault: true
           storage:
             type: filesystem
