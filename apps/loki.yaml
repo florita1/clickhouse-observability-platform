@@ -17,9 +17,6 @@ spec:
           replicas: 1
           persistence:
             enabled: false
-        
-        ruler:
-          enabled: false
 
         backend:
           replicas: 0
@@ -36,6 +33,8 @@ spec:
             type: filesystem
           serviceMonitor:
             enabled: true
+          ruler:
+            enabled: false
           resources:
             limits:
               cpu: 500m
