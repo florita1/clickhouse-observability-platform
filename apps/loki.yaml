@@ -34,7 +34,8 @@ spec:
           serviceMonitor:
             enabled: true
           ruler:
-            enabled: false
+            persistence:
+              enabled: false
           resources:
             limits:
               cpu: 500m
