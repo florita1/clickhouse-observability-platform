@@ -36,6 +36,10 @@ spec:
           ruler:
             persistence:
               enabled: false
+            storage:
+              type: local
+              local:
+                directory: /tmp/loki/rules
           resources:
             limits:
               cpu: 500m
@@ -43,6 +47,7 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
