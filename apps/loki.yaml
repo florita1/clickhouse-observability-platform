@@ -26,11 +26,20 @@ spec:
           replicas: 0
 
         loki:
-          auth_enabled: false
-          useTestSchema: true
-          isDefault: true
-          storage:
-            type: filesystem
+          config: |
+            auth_enabled: false
+            use_test_schema: true
+
+            storage_config:
+              filesystem:
+                directory: /tmp/loki/chunks
+
+            ruler:
+              storage:
+                type: local
+                local:
+                  directory: /tmp/loki/rules
+
           serviceMonitor:
             enabled: true
           resources:
@@ -40,13 +49,6 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-
-        rulerConfig:
-          storage:
-            type: local
-            local:
-              directory: /tmp/loki/rules
-
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
