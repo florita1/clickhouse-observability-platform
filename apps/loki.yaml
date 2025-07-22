@@ -33,13 +33,6 @@ spec:
             type: filesystem
           serviceMonitor:
             enabled: true
-          ruler:
-            persistence:
-              enabled: false
-            storage:
-              type: local
-              local:
-                directory: /tmp/loki/rules
           resources:
             limits:
               cpu: 500m
@@ -47,6 +40,12 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
+
+        rulerConfig:
+          storage:
+            type: local
+            local:
+              directory: /tmp/loki/rules
 
   destination:
     server: https://kubernetes.default.svc
