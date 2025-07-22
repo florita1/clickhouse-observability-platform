@@ -11,44 +11,18 @@ spec:
     targetRevision: 6.32.0
     helm:
       values: |
-        deploymentMode: "SingleBinary"
+        deploymentMode: SingleBinary
 
         singleBinary:
           replicas: 1
           persistence:
             enabled: false
 
-        backend:
-          replicas: 0
-        read:
-          replicas: 0
-        write:
-          replicas: 0
-
         loki:
-          config: |
-            auth_enabled: false
-            use_test_schema: true
-
-            storage_config:
-              filesystem:
-                directory: /tmp/loki/chunks
-
-            ruler:
-              storage:
-                type: local
-                local:
-                  directory: /tmp/loki/rules
-
-          serviceMonitor:
-            enabled: true
-          resources:
-            limits:
-              cpu: 500m
-              memory: 512Mi
-            requests:
-              cpu: 100m
-              memory: 128Mi
+          auth_enabled: false
+          useTestSchema: true
+          storage:
+            type: filesystem
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
