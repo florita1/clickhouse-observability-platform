@@ -43,6 +43,12 @@ singleBinary:
       cpu: 500m
       memory: 512Mi
   terminationGracePeriodSeconds: 30
+  extraVolumeMounts:
+    - name: loki-storage
+      mountPath: /var/loki
+  extraVolumes:
+    - name: loki-storage
+      emptyDir: { }
 
 serviceMonitor:
   enabled: true
