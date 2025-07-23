@@ -4,31 +4,18 @@ metadata:
   name: loki
   namespace: argocd
 spec:
+  destination:
+    namespace: observability
+    server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: loki
-    targetRevision: 6.32.0
+    path: helm/loki
+    repoURL: 'https://github.com/florita1/clickhouse-observability-platform.git'
+    targetRevision: HEAD
     helm:
-      values: |
-        deploymentMode: SingleBinary
-
-        singleBinary:
-          replicas: 1
-          persistence:
-            enabled: false
-
-        loki:
-          auth_enabled: false
-          useTestSchema: true
-          storage:
-            type: filesystem
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: observability
+      valueFiles:
+        - values.yaml
   syncPolicy:
     automated:
-      selfHeal: true
       prune: true
-    syncOptions:
-      - CreateNamespace=true
+      selfHeal: true
