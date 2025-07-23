@@ -1,6 +1,12 @@
 deploymentMode: SingleBinary
 
+global:
+  priorityClassName: ""
+  registry: ""
+  image: {}
+
 loki:
+  target: single-process
   image:
     repository: grafana/loki
     tag: main-ccb54c5
@@ -12,8 +18,19 @@ loki:
     type: filesystem
   limits_config:
     retention_period: 168h # 7 days
+  server:
+    http_listen_port: 3100
+    grpc_listen_port: 9095
+  configObjectName: loki-config
 
 singleBinary:
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+  automountServiceAccountToken: true
   replicas: 1
   persistence:
     enabled: true
@@ -21,7 +38,7 @@ singleBinary:
     accessModes:
       - ReadWriteOnce
     size: 10Gi
-
+  service: {}
   resources:
     requests:
       cpu: 100m
@@ -29,6 +46,7 @@ singleBinary:
     limits:
       cpu: 500m
       memory: 512Mi
+  terminationGracePeriodSeconds: 30
 
 serviceMonitor:
   enabled: true
@@ -53,3 +71,12 @@ enterprise:
 serviceAccount:
   create: true
   name: ""
+
+sidecar:
+  rules:
+    enabled: false
+
+rbac:
+  pspEnabled: false
+
+securityContext: {}
