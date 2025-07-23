@@ -41,8 +41,6 @@ spec:
                     target_label: node
                   - action: labelmap
                     regex: __meta_kubernetes_pod_label_(.+)
-                  - replacement: ingestion-logs
-                    target_label: job
 
         rbac:
           create: true
