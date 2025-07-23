@@ -49,3 +49,7 @@ backend:
 
 enterprise:
   enabled: false
+
+serviceAccount:
+  create: true
+  name: ""
