@@ -6,7 +6,6 @@ global:
   image: {}
 
 loki:
-  target: single-process
   image:
     repository: grafana/loki
     tag: main-ccb54c5
@@ -24,6 +23,7 @@ loki:
   configObjectName: loki-config
 
 singleBinary:
+  targetModule: all
   readinessProbe:
     httpGet:
       path: /ready
