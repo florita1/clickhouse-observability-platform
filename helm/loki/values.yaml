@@ -33,11 +33,7 @@ singleBinary:
   automountServiceAccountToken: true
   replicas: 1
   persistence:
-    enabled: true
-    storageClass: gp2
-    accessModes:
-      - ReadWriteOnce
-    size: 10Gi
+    enabled: false
   service: {}
   resources:
     requests:
