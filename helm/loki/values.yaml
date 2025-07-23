@@ -1,6 +1,10 @@
 deploymentMode: SingleBinary
 
 loki:
+  image:
+    repository: grafana/loki
+    tag: main-ccb54c5
+    pullPolicy: IfNotPresent
   auth_enabled: false
   commonConfig:
     replication_factor: 1
