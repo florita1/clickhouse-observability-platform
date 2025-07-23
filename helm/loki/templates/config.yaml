@@ -41,3 +41,5 @@ data:
 
     limits_config:
       retention_period: 168h
+      allow_structured_metadata: false
+
