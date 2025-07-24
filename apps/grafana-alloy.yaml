@@ -9,11 +9,12 @@ spec:
     server: https://kubernetes.default.svc
     namespace: observability
   source:
-    repoURL: 'https://github.com/florita1/clickhouse-observability-platform.git'
-    targetRevision: HEAD
+    chart: alloy
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 1.2.0
     helm:
       valueFiles:
-        - alloy-values.yaml
+        - apps/alloy-values.yaml
   syncPolicy:
     automated:
       selfHeal: true

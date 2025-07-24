@@ -1,32 +1,38 @@
-configMap:
-  create: true
-  alloy.yaml: |
-    otelcol.receiver.otlp "default" {
-      protocols = ["http"]
-    }
-
-    otelcol.exporter.otlphttp "tempo" {
-      endpoint = "http://tempo.observability.svc.cluster.local:4318"
-      tls {
-        insecure = true
+alloy:
+  configMap:
+    content: |
+      otelcol.receiver.otlp "default" {
+        protocols = ["http", "grpc"]
       }
-    }
-
-    otelcol.processor.batch "default" {}
-
-    otelcol.service "default" {
-      pipelines = {
-        traces = {
-          receivers  = [otelcol.receiver.otlp.default]
-          processors = [otelcol.processor.batch.default]
-          exporters  = [otelcol.exporter.otlphttp.tempo]
+  
+      otelcol.exporter.otlphttp "tempo" {
+        endpoint = "http://tempo.observability.svc.cluster.local:4318"
+        tls {
+          insecure = true
         }
       }
-    }
-
-service:
+  
+      otelcol.processor.batch "default" {}
+  
+      otelcol.service "default" {
+        pipelines = {
+          traces = {
+            receivers  = [otelcol.receiver.otlp.default]
+            processors = [otelcol.processor.batch.default]
+            exporters  = [otelcol.exporter.otlphttp.tempo]
+          }
+        }
+      }
   extraPorts:
     - name: otlp-http
       port: 4318
       targetPort: 4318
       protocol: TCP
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+      protocol: TCP
+
+service:
+  enabled: true
+  type: ClusterIP
