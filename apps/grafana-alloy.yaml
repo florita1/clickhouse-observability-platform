@@ -31,9 +31,9 @@ spec:
               otelcol.processor.batch "default" {}
 
               otelcol.pipeline "traces" {
-                receivers  = [otelcol.receiver.otlp.default],
-                processors = [otelcol.processor.batch.default],
-                exporters  = [otelcol.exporter.otlphttp.tempo],
+                receivers  = [otelcol.receiver.otlp.default]
+                processors = [otelcol.processor.batch.default]
+                exporters  = [otelcol.exporter.otlphttp.tempo]
               }
           extraPorts:
             - name: otlp-http
