@@ -31,7 +31,7 @@ spec:
                   name: clickhouse-secret
                   key: password
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: {{ .Values.env.otelExporterOtlpEndpoint }}
+              value: "{{ .Values.env.otelExporterOtlpEndpoint }}"
 
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
