@@ -14,11 +14,10 @@ spec:
       targetRevision: 1.2.0
       helm:
         valueFiles:
-          - ../values.yaml  # relative path from chart to the next source’s file
+          - values-ref://apps/alloy-values.yaml
     - repoURL: https://github.com/florita1/clickhouse-observability-platform.git
       targetRevision: HEAD
       ref: values
-      path: apps
   syncPolicy:
     automated:
       selfHeal: true
