@@ -15,6 +15,10 @@ spec:
     helm:
       valueFiles:
         - apps/alloy-values.yaml
+    path: .
+  sources:
+    - repoURL: https://github.com/florita1/clickhouse-observability-platform.git
+      targetRevision: HEAD
   syncPolicy:
     automated:
       selfHeal: true
