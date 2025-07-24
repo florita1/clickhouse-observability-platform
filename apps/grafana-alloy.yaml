@@ -30,15 +30,6 @@ spec:
 
               otelcol.processor.batch "default" {}
 
-              otelcol.service "default" {
-                pipelines = {
-                  traces = {
-                    receivers  = [otelcol.receiver.otlp.default],
-                    processors = [otelcol.processor.batch.default],
-                    exporters  = [otelcol.exporter.otlphttp.tempo],
-                  }
-                }
-              }
           extraPorts:
             - name: otlp-http
               port: 4318
