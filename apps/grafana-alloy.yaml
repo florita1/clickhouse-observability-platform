@@ -8,16 +8,50 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
-  sources:
-    - repoURL: https://grafana.github.io/helm-charts
-      chart: alloy
-      targetRevision: 1.2.0
-      helm:
-        valueFiles:
-          - values-ref://apps/alloy-values.yaml
-    - repoURL: https://github.com/florita1/clickhouse-observability-platform.git
-      targetRevision: HEAD
-      ref: values
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: alloy
+    targetRevision: 1.2.0
+    helm:
+      values: |
+        alloy:
+          configMap:
+            content: |
+              otelcol.receiver.otlp "default" {
+                protocols = ["http", "grpc"]
+              }
+
+              otelcol.exporter.otlphttp "tempo" {
+                endpoint = "http://tempo.observability.svc.cluster.local:4318"
+                tls {
+                  insecure = true
+                }
+              }
+
+              otelcol.processor.batch "default" {}
+
+              otelcol.service "default" {
+                pipelines = {
+                  traces = {
+                    receivers  = [otelcol.receiver.otlp.default]
+                    processors = [otelcol.processor.batch.default]
+                    exporters  = [otelcol.exporter.otlphttp.tempo]
+                  }
+                }
+              }
+          extraPorts:
+            - name: otlp-http
+              port: 4318
+              targetPort: 4318
+              protocol: TCP
+            - name: otlp-grpc
+              port: 4317
+              targetPort: 4317
+              protocol: TCP
+
+        service:
+          enabled: true
+          type: ClusterIP
   syncPolicy:
     automated:
       selfHeal: true
