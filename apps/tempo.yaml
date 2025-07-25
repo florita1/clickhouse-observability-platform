@@ -21,7 +21,7 @@ spec:
           storage:
             trace:
               backend: local
-       service:
+        service:
           type: ClusterIP
           ports:
             - name: http
