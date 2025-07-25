@@ -25,6 +25,12 @@ spec:
                   endpoint = "0.0.0.0:4318"
                 }
                 output {
+                  traces = [otelcol.processor.batch.default.input]
+                }
+              }
+
+              otelcol.processor.batch "default" {
+                output {
                   traces = [otelcol.exporter.otlp.tempo.input]
                 }
               }
