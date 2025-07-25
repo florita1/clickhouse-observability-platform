@@ -13,7 +13,7 @@ spec:
       values: |
         config:
           clients:
-            - url: http://grafana-alloy.observability.svc.cluster.local:3500/loki/api/v1/push
+            - url: http://grafana-alloy.observability.svc.cluster.local:4318/otlp/v1/logs
               external_labels:
                 source: promtail
         
