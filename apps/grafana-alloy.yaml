@@ -58,7 +58,7 @@ spec:
                 }
               }
 
-              loki.source.loki_push_api.from_promtail.output = [loki.write.to_loki.input]
+              from_promtail.output = [to_loki.input]
 
           extraPorts:
             - name: otlp-grpc
