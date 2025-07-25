@@ -50,6 +50,9 @@ spec:
                 listen {
                   address = "0.0.0.0:3500"
                 }
+                output {
+                  logs = [loki.write.to_loki.input]
+                }
               }
 
               loki.write "to_loki" {
@@ -57,8 +60,6 @@ spec:
                   url = "http://loki.observability.svc.cluster.local:3100/loki/api/v1/push"
                 }
               }
-
-              from_promtail.output = [to_loki.input]
 
           extraPorts:
             - name: otlp-grpc
