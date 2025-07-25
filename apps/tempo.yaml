@@ -23,10 +23,6 @@ spec:
               backend: local
         service:
           type: ClusterIP
-          ports:
-            - name: http
-              port: 3100
-              targetPort: 3100
         resources:
           limits:
             cpu: 500m
