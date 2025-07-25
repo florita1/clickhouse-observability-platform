@@ -13,7 +13,7 @@ spec:
       values: |
         config:
           clients:
-            - url: http://loki:3100/loki/api/v1/push
+            - url: http://grafana-alloy.observability.svc.cluster.local:3500/loki/api/v1/push
 
           snippets:
             pipeline_stages:

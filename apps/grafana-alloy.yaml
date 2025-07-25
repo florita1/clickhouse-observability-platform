@@ -17,6 +17,7 @@ spec:
         alloy:
           configMap:
             content: |
+              // --- Traces ---
               otelcol.receiver.otlp "default" {
                 grpc {
                   endpoint = "0.0.0.0:4317"
@@ -44,6 +45,21 @@ spec:
                 }
               }
 
+              // --- Logs ---
+              loki.source.loki_push_api "from_promtail" {
+                listen {
+                  address = "0.0.0.0:3500"
+                }
+              }
+
+              loki.write "to_loki" {
+                endpoint {
+                  url = "http://loki.observability.svc.cluster.local:3100/loki/api/v1/push"
+                }
+              }
+
+              loki.source.loki_push_api.from_promtail.output = [loki.write.to_loki.input]
+
           extraPorts:
             - name: otlp-grpc
               port: 4317
@@ -51,6 +67,9 @@ spec:
             - name: otlp-http
               port: 4318
               targetPort: 4318
+            - name: loki-push
+              port: 3500
+              targetPort: 3500
 
         service:
           enabled: true
