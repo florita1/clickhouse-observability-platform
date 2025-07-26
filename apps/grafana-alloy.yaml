@@ -55,9 +55,15 @@ spec:
                 forward_to = [loki.write.local.receiver]
               }
 
+              otelcol.exporter.otlp "logs" {
+                client {
+                  endpoint = "0.0.0.0:3500"
+                }
+              }
+
               otelcol.receiver.loki "default" {
                 output {
-                  logs = [otelcol.processor.batch.logs.input]
+                  logs = [otelcol.exporter.otlp.logs.input]
                 }
               }
 
