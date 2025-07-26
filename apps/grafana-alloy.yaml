@@ -56,11 +56,6 @@ spec:
               }
 
               otelcol.receiver.loki "default" {
-                server {
-                  http {
-                    endpoint = "0.0.0.0:3500"
-                  }
-                }
                 output {
                   logs = [otelcol.processor.batch.logs.input]
                 }
