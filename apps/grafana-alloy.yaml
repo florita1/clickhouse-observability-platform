@@ -35,7 +35,7 @@ spec:
                   traces = [otelcol.exporter.otlp.tempo.input]
                 }
               }
-             
+
               otelcol.processor.batch "logs" {
                 output {
                   logs = [otelcol.exporter.loki.default.input]
@@ -50,11 +50,22 @@ spec:
                   }
                 }
               }
-        
+
               otelcol.exporter.loki "default" {
                 forward_to = [loki.write.local.receiver]
               }
-              
+
+              otelcol.receiver.loki "default" {
+                server {
+                  http {
+                    endpoint = "0.0.0.0:3500"
+                  }
+                }
+                output {
+                  logs = [otelcol.processor.batch.logs.input]
+                }
+              }
+
               loki.write "local" {
                 endpoint {
                   url = "http://loki.observability.svc.cluster.local:3100"
@@ -68,6 +79,9 @@ spec:
             - name: otlp-http
               port: 4318
               targetPort: 4318
+            - name: loki-push
+              port: 3500
+              targetPort: 3500
 
         service:
           enabled: true
