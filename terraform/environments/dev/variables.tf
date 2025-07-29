@@ -36,8 +36,3 @@ variable "clickhouse_ingestor_user" {
 variable "clickhouse_ingestor_password" {
   type = string
 }
-
-variable "clickhouse_lb_host" {
-  description = "Public hostname of the ClickHouse LoadBalancer service"
-  type        = string
-}

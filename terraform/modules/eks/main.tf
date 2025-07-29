@@ -43,7 +43,6 @@ resource "aws_eks_addon" "vpc_cni" {
   cluster_name = aws_eks_cluster.this.name
   addon_name   = "vpc-cni"
   addon_version = "v1.16.2-eksbuild.1" # Optional: pin a known stable version
-  configuration_conflict_resolution = "OVERWRITE"
 
   configuration_values = jsonencode({
     env = [
