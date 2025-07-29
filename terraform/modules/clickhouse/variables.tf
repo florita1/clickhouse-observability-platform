@@ -38,3 +38,7 @@ variable "admin_password" {
   description = "Admin password for ClickHouse"
   type        = string
 }
+
+variable "enable_postdeploy" {
+  type        = bool
+}

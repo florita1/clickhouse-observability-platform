@@ -36,3 +36,8 @@ variable "clickhouse_ingestor_user" {
 variable "clickhouse_ingestor_password" {
   type = string
 }
+
+variable "enable_postdeploy" {
+  type    = bool
+  default = false
+}
