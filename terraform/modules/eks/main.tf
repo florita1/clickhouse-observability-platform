@@ -38,3 +38,26 @@ resource "aws_eks_node_group" "default" {
 #
 #   depends_on = [aws_eks_cluster.this]
 # }
+
+resource "aws_eks_addon" "vpc_cni" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "vpc-cni"
+  addon_version = "v1.16.2-eksbuild.1" # Optional: pin a known stable version
+  configuration_conflict_resolution = "OVERWRITE"
+
+  configuration_values = jsonencode({
+    env = [
+      {
+        name  = "ENABLE_PREFIX_DELEGATION"
+        value = "true"
+      },
+      {
+        name  = "WARM_PREFIX_TARGET"
+        value = "1"
+      }
+    ]
+  })
+
+  depends_on = [aws_eks_cluster.this]
+}
+
