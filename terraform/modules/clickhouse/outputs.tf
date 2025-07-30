@@ -1,15 +1,11 @@
 output "clickhouse_database" {
-  value = clickhousedbops_database.db.name
+  value = length(clickhousedbops_database.db) > 0 ? clickhousedbops_database.db[0].name : ""
 }
 
 output "clickhouse_user" {
-  value = clickhousedbops_user.user.name
+  value = length(clickhousedbops_user.user) > 0 ? clickhousedbops_user.user[0].name : ""
 }
 
 output "clickhouse_role" {
-  value = clickhousedbops_role.role.name
+  value = length(clickhousedbops_role.role) > 0 ? clickhousedbops_role.role[0].name : ""
 }
-
-# output "wait_for_clickhouse" {
-#   value = null_resource.wait_for_clickhouse
-# }

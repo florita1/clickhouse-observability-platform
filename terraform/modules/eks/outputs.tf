@@ -8,12 +8,12 @@ output "cluster_endpoint" {
   value       = aws_eks_cluster.this.endpoint
 }
 
-# output "fargate_profile_name" {
-#   description = "Name of the Fargate profile used for observability"
-#   value       = aws_eks_fargate_profile.observability.fargate_profile_name
-# }
-
 output "cluster_ca_certificate" {
   description = "Base64-encoded EKS cluster CA data"
   value       = aws_eks_cluster.this.certificate_authority[0].data
+}
+
+output "node_group_name" {
+  description = "The name of the default EKS node group"
+  value       = aws_eks_node_group.default.node_group_name
 }

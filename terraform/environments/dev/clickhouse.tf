@@ -13,8 +13,9 @@ module "clickhouse" {
   role_name             = "ingest_only"
 
   table_name            = "events"
-}
 
+  enable_postdeploy     = var.enable_postdeploy
+}
 
 resource "kubernetes_secret" "clickhouse_ingestor" {
   metadata {

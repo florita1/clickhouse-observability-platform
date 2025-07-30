@@ -3,7 +3,7 @@ resource "aws_eks_cluster" "this" {
   role_arn = var.cluster_role_arn
 
   vpc_config {
-    subnet_ids = var.public_subnet_ids
+    subnet_ids             = var.public_subnet_ids
     endpoint_public_access = true
   }
 }
@@ -20,43 +20,25 @@ resource "aws_eks_node_group" "default" {
     min_size     = 1
   }
 
-  instance_types = ["t3.medium"]  # Use an on-demand instance
+  instance_types = ["t3.medium"]
   capacity_type  = "ON_DEMAND"
 
   depends_on = [aws_eks_cluster.this]
 }
 
-# resource "aws_eks_fargate_profile" "observability" {
-#   cluster_name           = aws_eks_cluster.this.name
-#   fargate_profile_name   = "observability"
-#   pod_execution_role_arn = var.fargate_pod_execution_role_arn
-#   subnet_ids             = var.public_subnet_ids
-#
-#   selector {
-#     namespace = "observability"
-#   }
-#
-#   depends_on = [aws_eks_cluster.this]
-# }
+resource "null_resource" "aws_node_patch" {
+  depends_on = [aws_eks_node_group.default]
 
-resource "aws_eks_addon" "vpc_cni" {
-  cluster_name = aws_eks_cluster.this.name
-  addon_name   = "vpc-cni"
-  addon_version = "v1.16.2-eksbuild.1" # Optional: pin a known stable version
+  triggers = {
+    config_hash = sha1("ENABLE_PREFIX_DELEGATION=true,WARM_PREFIX_TARGET=1")
+  }
 
-  configuration_values = jsonencode({
-    env = [
-      {
-        name  = "ENABLE_PREFIX_DELEGATION"
-        value = "true"
-      },
-      {
-        name  = "WARM_PREFIX_TARGET"
-        value = "1"
-      }
-    ]
-  })
-
-  depends_on = [aws_eks_cluster.this]
+  provisioner "local-exec" {
+    command = <<EOT
+kubectl -n kube-system patch daemonset aws-node --type='json' -p='[
+  {"op": "add", "path": "/spec/template/spec/containers/0/env/-", "value": {"name":"ENABLE_PREFIX_DELEGATION","value":"true"}},
+  {"op": "add", "path": "/spec/template/spec/containers/0/env/-", "value": {"name":"WARM_PREFIX_TARGET","value":"1"}}
+]'
+EOT
+  }
 }
-
