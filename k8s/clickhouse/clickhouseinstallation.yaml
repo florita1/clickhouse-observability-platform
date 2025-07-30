@@ -27,7 +27,7 @@ spec:
             protocol: HTTP
             template: default
             spec:
-              type: LoadBalancer
+              type: ClusterIP
 
   templates:
     podTemplates:
