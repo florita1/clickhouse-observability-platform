@@ -20,7 +20,7 @@ resource "aws_eks_node_group" "default" {
     min_size     = 1
   }
 
-  instance_types = ["t3.medium"]
+  instance_types = ["t3.large"]
   capacity_type  = "ON_DEMAND"
 
   depends_on = [aws_eks_cluster.this]
