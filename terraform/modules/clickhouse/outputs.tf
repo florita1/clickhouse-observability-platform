@@ -1,7 +1,3 @@
-output "clickhouse_database" {
-  value = length(clickhousedbops_database.db) > 0 ? clickhousedbops_database.db[0].name : ""
-}
-
 output "clickhouse_user" {
   value = length(clickhousedbops_user.user) > 0 ? clickhousedbops_user.user[0].name : ""
 }

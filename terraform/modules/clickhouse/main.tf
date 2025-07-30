@@ -7,12 +7,6 @@ terraform {
   }
 }
 
-resource "clickhousedbops_database" "db" {
-  count = var.enable_postdeploy ? 1 : 0
-
-  name = var.database_name
-}
-
 resource "clickhousedbops_user" "user" {
   count = var.enable_postdeploy ? 1 : 0
 
