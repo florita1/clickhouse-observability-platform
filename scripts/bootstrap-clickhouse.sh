@@ -44,3 +44,6 @@ terraform apply -var="enable_postdeploy=true"
 # Clean up port-forward process
 echo "Cleaning up port-forward..."
 kill "$PORT_FWD_PID"
+
+echo "Restarting ingestion-service to connect to ClickHouse..."
+kubectl rollout restart deployment ingestion-service -n ingestion
