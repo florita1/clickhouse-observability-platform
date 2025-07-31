@@ -37,6 +37,12 @@ spec:
                 type: tempo
                 access: proxy
                 url: http://tempo.observability.svc.cluster.local:3200
+        sidecar:
+          dashboards:
+            enabled: true
+            label: grafana_dashboard
+            labelValue: "1"
+            searchNamespace: ALL
 
   destination:
     server: https://kubernetes.default.svc
