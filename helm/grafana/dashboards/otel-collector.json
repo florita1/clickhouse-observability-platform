@@ -1,0 +1,9 @@
+{
+  "title": "OTEL Collector Performance",
+  "uid": "otel-collector",
+  "tags": [
+    "otel",
+    "collector"
+  ],
+  "schemaVersion": 30
+}

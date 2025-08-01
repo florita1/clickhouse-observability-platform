@@ -1,0 +1,9 @@
+{
+  "title": "Loki Logs Overview",
+  "uid": "loki-overview",
+  "tags": [
+    "loki",
+    "logs"
+  ],
+  "schemaVersion": 30
+}

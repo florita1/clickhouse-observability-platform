@@ -1,0 +1,9 @@
+{
+  "title": "K8s Networking Cluster",
+  "uid": "k8s-networking",
+  "tags": [
+    "kubernetes",
+    "networking"
+  ],
+  "schemaVersion": 30
+}

@@ -849,8 +849,28 @@ defaultCurlOptions: "-skf"
 ##
 dashboards:
   default:
+    alloy-flow:
+      file: dashboards/alloy-flow.json
+    k8s-cluster-resources:
+      file: dashboards/k8s-cluster-resources.json
+    k8s-logs-explorer:
+      file: dashboards/k8s-logs-explorer.json
+    k8s-networking:
+      file: dashboards/k8s-networking.json
+    loki-overview:
+      file: dashboards/loki-overview.json
+    node-exporter-full:
+      file: dashboards/node-exporter-full.json
+    otel-collector:
+      file: dashboards/otel-collector.json
     otel-traces-overview:
       file: dashboards/otel-traces-overview.json
+    service-map:
+      file: dashboards/service-map.json
+    tempo-search:
+      file: dashboards/tempo-search.json
+    trace-heatmap:
+      file: dashboards/trace-heatmap.json
   # default:
   #   some-dashboard:
   #     json: |

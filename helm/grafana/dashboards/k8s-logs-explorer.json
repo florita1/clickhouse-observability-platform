@@ -1,0 +1,9 @@
+{
+  "title": "Kubernetes Logs Explorer",
+  "uid": "k8s-logs-explorer",
+  "tags": [
+    "kubernetes",
+    "logs"
+  ],
+  "schemaVersion": 30
+}
