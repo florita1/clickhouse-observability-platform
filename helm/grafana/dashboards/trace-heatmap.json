@@ -1,9 +1,0 @@
-{
-  "title": "Trace Duration Heatmap",
-  "uid": "trace-heatmap",
-  "tags": [
-    "tempo",
-    "heatmap"
-  ],
-  "schemaVersion": 30
-}

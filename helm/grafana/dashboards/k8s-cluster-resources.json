@@ -1,9 +1,0 @@
-{
-  "title": "K8s Compute Resources Cluster",
-  "uid": "k8s-cluster-resources",
-  "tags": [
-    "kubernetes",
-    "resources"
-  ],
-  "schemaVersion": 30
-}
