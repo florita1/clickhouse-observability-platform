@@ -847,11 +847,10 @@ defaultCurlOptions: "-skf"
 ##
 ## dashboards per provider, use provider name as key.
 ##
-dashboards: {
+dashboards:
   default:
     otel-traces-overview:
       file: dashboards/otel-traces-overview.json
-}
   # default:
   #   some-dashboard:
   #     json: |
