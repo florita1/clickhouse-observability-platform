@@ -6,44 +6,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: grafana
-    targetRevision: 9.2.10
+    repoURL: 'https://github.com/florita1/clickhouse-observability-platform.git'
+    targetRevision: HEAD
+    path: helm/grafana
     helm:
       releaseName: grafana
-      values: |
-        adminUser: admin
-        adminPassword: admin123
-        service:
-          type: LoadBalancer
-
-        datasources:
-          datasources.yaml:
-            apiVersion: 1
-            datasources:
-              - name: Prometheus
-                type: prometheus
-                access: proxy
-                url: http://prometheus.observability.svc.cluster.local:9090
-                isDefault: true
-
-              - name: Loki
-                type: loki
-                access: proxy
-                url: http://loki.observability.svc.cluster.local:3100
-                isDefault: false
-
-              - name: Tempo
-                type: tempo
-                access: proxy
-                url: http://tempo.observability.svc.cluster.local:3200
-        sidecar:
-          dashboards:
-            enabled: true
-            label: grafana_dashboard
-            labelValue: "1"
-            searchNamespace: ALL
-
   destination:
     server: https://kubernetes.default.svc
     namespace: observability
