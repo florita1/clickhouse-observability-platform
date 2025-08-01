@@ -1,30 +1,25 @@
 {{- if .Values.dashboards }}
 {{- $files := .Files }}
 {{- range $provider, $dashboards := .Values.dashboards }}
+  {{- range $key, $value := $dashboards }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "grafana.fullname" $ }}-dashboards-{{ $provider }}
+  name: {{ include "grafana.fullname" $ }}-dashboard-{{ $key | trunc 50 }}
   namespace: {{ include "grafana.namespace" $ }}
   labels:
-    {{- include "grafana.labels" $ | nindent 4 }}
     grafana_dashboard: "1"
+    dashboard-provider: {{ $provider }}
 data:
-{{- $dashboardFound := false }}
-{{- range $key, $value := $dashboards }}
-  {{- if or (hasKey $value "json") (hasKey $value "file") }}
   {{ $key }}.json: |-
-    {{- if hasKey $value "json" }}
-{{ $value.json | indent 6 }}
-    {{- else if hasKey $value "file" }}
-{{ $files.Get $value.file | indent 6 }}
-    {{- end }}
-  {{- $dashboardFound = true }}
+{{- if hasKey $value "file" }}
+{{ $files.Get $value.file | indent 4 }}
+{{- else if hasKey $value "json" }}
+{{ $value.json | indent 4 }}
+{{- else }}
+    {}
+{{- end }}
   {{- end }}
-{{- end }}
-{{- if not $dashboardFound }}
-  {}
-{{- end }}
----
 {{- end }}
 {{- end }}
