@@ -661,7 +661,7 @@ plugins: []
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
 ##
-datasources: {
+datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
@@ -681,7 +681,6 @@ datasources: {
         type: tempo
         access: proxy
         url: http://tempo.observability.svc.cluster.local:3200
-}
 #  datasources.yaml:
 #    apiVersion: 1
 #    datasources:
