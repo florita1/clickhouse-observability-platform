@@ -7,9 +7,7 @@ metadata:
   name: {{ include "grafana.fullname" $ }}-dashboards-{{ $provider }}
   namespace: {{ include "grafana.namespace" $ }}
   labels:
-    {{- include "grafana.labels" $ | nindent 4 }}
-    dashboard-provider: {{ $provider }}
-{{- if $dashboards }}
+    grafana_dashboard: "1"
 data:
 {{- $dashboardFound := false }}
 {{- range $key, $value := $dashboards }}
