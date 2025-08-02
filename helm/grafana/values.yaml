@@ -849,14 +849,8 @@ defaultCurlOptions: "-skf"
 ##
 dashboards:
   default:
-    loki-overview:
-      file: dashboards/loki-overview.json
-    node-exporter-full:
-      file: dashboards/node-exporter-full.json
     otel-traces-overview:
       file: dashboards/otel-traces-overview.json
-    tempo-search:
-      file: dashboards/tempo-search.json
   # default:
   #   some-dashboard:
   #     json: |
@@ -1177,7 +1171,7 @@ sidecar:
     # provider configuration that lets grafana manage the dashboards
     provider:
       # name of the provider, should be unique
-      name: sidecarProvider
+      name: default
       # orgid as configured in grafana
       orgid: 1
       # folder in which the dashboards should be imported in grafana
