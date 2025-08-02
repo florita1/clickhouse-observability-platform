@@ -20,7 +20,14 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 3,
-  "links": [],
+  "links": [
+    {
+    "title": "Explore Logs",
+    "url": "/d/loki-logs-dashboard-id/loki-logs?var-namespace=$namespace&var-service_name=$service_name",
+    "type": "dashboards",
+    "targetBlank": true
+    }
+  ],
   "panels": [
     {
       "datasource": {
@@ -240,14 +247,6 @@
       {
         "name": "trace_id",
         "type": "textbox"
-      }
-    ],
-    "links": [
-      {
-        "title": "Explore Logs",
-        "url": "/d/loki-logs-dashboard-id/loki-logs?var-namespace=$namespace&var-service_name=$service_name",
-        "type": "dashboards",
-        "targetBlank": true
       }
     ]
   },

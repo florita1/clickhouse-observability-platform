@@ -20,7 +20,14 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 4,
-  "links": [],
+  "links": [
+    {
+      "title": "View Trace in Tempo",
+      "url": "/d/tempo-dashboard-id/tempo-dashboard?var-trace_id=$trace_id&var-service_name=$service_name",
+      "targetBlank": true,
+      "type": "dashboards"
+    }
+  ],
   "panels": [
     {
       "datasource": {
@@ -944,14 +951,6 @@
       {
         "name": "trace_id",
         "type": "textbox"
-      }
-    ],
-    "links": [
-      {
-        "title": "View Trace in Tempo",
-        "url": "/d/tempo-dashboard-id/tempo-dashboard?var-trace_id=$trace_id&var-service_name=$service_name",
-        "targetBlank": true,
-        "type": "dashboards"
       }
     ]
   },
