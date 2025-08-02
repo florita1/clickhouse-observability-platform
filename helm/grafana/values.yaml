@@ -853,8 +853,8 @@ dashboards:
       file: dashboards/logging-dashboard-via-loki-v2.json
     loki-dashboard:
       file: dashboards/loki-dashboard.json
-    node-exporter-full:
-      file: dashboards/node-exporter-full.json
+#    node-exporter-full:
+#      file: dashboards/node-exporter-full.json
     otel-tempo:
       file: dashboards/otel-tempo.json
   # default:
