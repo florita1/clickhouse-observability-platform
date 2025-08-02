@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+echo "Manually installing Prometheus CRDs"
+kubectl apply -f prometheus-crds/
+echo "Waiting for CRDs to be ready..."
+kubectl wait --for=condition=Established crd/servicemonitors.monitoring.coreos.com --timeout=60s
+kubectl apply -f apps/prometheus.yaml
+
 NAMESPACE="clickhouse"
 LABEL="clickhouse.altinity.com/chi=clickhouse"
 DDL_FILE="ddl/init.sql"

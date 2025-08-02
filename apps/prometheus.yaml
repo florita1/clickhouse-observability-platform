@@ -16,7 +16,7 @@ spec:
       releaseName: prometheus
       values: |
         crds:
-          enabled: true
+          enabled: false
 
         grafana:
           enabled: false
