@@ -849,14 +849,14 @@ defaultCurlOptions: "-skf"
 ##
 dashboards:
   default:
-    loki-overview:
-      file: dashboards/loki-overview.json
-    node-exporter-full:
-      file: dashboards/node-exporter-full.json
+#    loki-overview:
+#      file: dashboards/loki-overview.json
+#    node-exporter-full:
+#      file: dashboards/node-exporter-full.json
     otel-traces-overview:
       file: dashboards/otel-traces-overview.json
-    tempo-search:
-      file: dashboards/tempo-search.json
+#    tempo-search:
+#      file: dashboards/tempo-search.json
   # default:
   #   some-dashboard:
   #     json: |
