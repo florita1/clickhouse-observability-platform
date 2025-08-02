@@ -926,6 +926,32 @@
         ],
         "query": "error",
         "type": "textbox"
+      },
+      {
+        "name": "namespace",
+        "type": "query",
+        "datasource": "Loki",
+        "definition": "label_values({job=~\".+\"}, namespace)",
+        "refresh": 1
+      },
+      {
+        "name": "service_name",
+        "type": "query",
+        "datasource": "Loki",
+        "definition": "label_values({namespace=~\".+\"}, service_name)",
+        "refresh": 1
+      },
+      {
+        "name": "trace_id",
+        "type": "textbox"
+      }
+    ],
+    "links": [
+      {
+        "title": "View Trace in Tempo",
+        "url": "/d/tempo-dashboard-id/tempo-dashboard?var-trace_id=$trace_id&var-service_name=$service_name",
+        "targetBlank": true,
+        "type": "dashboards"
       }
     ]
   },

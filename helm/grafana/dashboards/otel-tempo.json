@@ -5490,7 +5490,34 @@
         "refresh": 1,
         "regex": "",
         "type": "query"
+      },
+      {
+        "name": "namespace",
+        "type": "query",
+        "datasource": "Loki",
+        "definition": "label_values({job=~\".+\"}, namespace)",
+        "refresh": 1
+      },
+      {
+        "name": "service_name",
+        "type": "query",
+        "datasource": "Loki",
+        "definition": "label_values({namespace=~\".+\"}, service_name)",
+        "refresh": 1
+      },
+      {
+        "name": "trace_id",
+        "type": "textbox"
       }
+    ],
+    "links": [
+      {
+        "title": "View Logs in Loki",
+        "url": "/d/loki-logs-dashboard-id/loki-logs?var-namespace=$namespace&var-service_name=$service_name&var-trace_id=$trace_id",
+        "type": "dashboards",
+        "targetBlank": true
+      }
+
     ]
   },
   "time": {

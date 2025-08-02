@@ -229,6 +229,25 @@
         ],
         "query": "",
         "type": "textbox"
+      },
+      {
+        "name": "service_name",
+        "type": "query",
+        "datasource": "Loki",
+        "definition": "label_values({namespace=~\".+\"}, service_name)",
+        "refresh": 1
+      },
+      {
+        "name": "trace_id",
+        "type": "textbox"
+      }
+    ],
+    "links": [
+      {
+        "title": "Explore Logs",
+        "url": "/d/loki-logs-dashboard-id/loki-logs?var-namespace=$namespace&var-service_name=$service_name",
+        "type": "dashboards",
+        "targetBlank": true
       }
     ]
   },
