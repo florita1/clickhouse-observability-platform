@@ -848,7 +848,7 @@ defaultCurlOptions: "-skf"
 ## dashboards per provider, use provider name as key.
 ##
 dashboards:
-  default:
+  sidecarProvider:
 #    loki-overview:
 #      file: dashboards/loki-overview.json
 #    node-exporter-full:
