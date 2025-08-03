@@ -4,6 +4,14 @@ This repository contains Terraform code for provisioning a production-ready AWS 
 
 ---
 
+## CI Status
+
+| Workflow | Status                                                                                                                 |
+|----------|------------------------------------------------------------------------------------------------------------------------|
+| Terraform | ![Terraform](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/terraform.yaml/badge.svg) |
+| Helm Charts | ![Helm](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/helm.yaml/badge.svg)           |
+| Argo CD | ![Argo CD](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/argocd.yaml/badge.svg)      |
+
 ## 📁 Repo Structure
 
 ```

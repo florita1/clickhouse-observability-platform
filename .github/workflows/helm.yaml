@@ -1,0 +1,32 @@
+name: Helm Lint & Render
+
+on:
+  push:
+    paths:
+      - 'helm/**'
+  pull_request:
+    paths:
+      - 'helm/**'
+
+jobs:
+  helm:
+    name: Helm Charts Lint + Template
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        chart:
+          - helm/grafana
+          - helm/ingestion-service
+          - helm/loki
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Helm Lint
+        run: helm lint ${{ matrix.chart }}
+
+      - name: Helm Template Render
+        run: helm template test-render ${{ matrix.chart }} --values ${{ matrix.chart }}/values.yaml

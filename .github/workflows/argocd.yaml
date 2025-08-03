@@ -1,0 +1,27 @@
+name: Argo CD Manifest Check
+
+on:
+  push:
+    paths:
+      - 'apps/**'
+  pull_request:
+    paths:
+      - 'apps/**'
+
+jobs:
+  validate:
+    name: Validate Argo CD Apps
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Kubeval
+        run: |
+          curl -sLO https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo mv kubeval /usr/local/bin/
+
+      - name: Validate manifests
+        run: |
+          kubeval apps/*.yaml --strict --ignore-missing-schemas
