@@ -26,6 +26,11 @@ jobs:
         with:
           terraform_version: 1.7.5
 
+      - name: Set up Terraform variables
+        run: |
+          echo "TF_VAR_clickhouse_admin_password=${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}" >> $GITHUB_ENV
+          echo "TF_VAR_clickhouse_ingestor_password=${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}" >> $GITHUB_ENV
+
       - name: Terraform Format
         run: terraform fmt -recursive -check
 
