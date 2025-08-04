@@ -130,3 +130,43 @@ kubectl port-forward svc/clickhouse -n clickhouse 8123:8123
 Then open:
 
 http://localhost:8123
+
+## ⚙️ Infrastructure Deployment Strategy
+
+This project uses a multi-phase, GitOps-friendly Terraform CD pipeline via GitHub Actions.
+
+### 🚀 Deployment Phases
+
+| Phase | Description |
+|-------|-------------|
+| **Phase 1 – Infra Apply** | Provisions EKS, IAM, Argo CD, and base infra using `terraform apply` |
+| **Phase 2 – Bootstrap** | Installs Prometheus CRDs, waits for ClickHouse, applies SQL DDL |
+| **Phase 3 – Post-Deploy Apply** | Runs `terraform apply -var="enable_postdeploy=true"` to create ClickHouse users and ingestion-specific config |
+| **Phase 4 – Ingestion Restart** | Restarts ingestion-service to connect with ready ClickHouse instance |
+
+Each phase is defined in `.github/workflows/terraform-cd.yaml` and guarded by stage dependencies.
+
+### 🛡️ Safety Considerations
+
+- Terraform `apply` is restricted to `main` branch
+- Optional manual approval gate for production (`workflow_dispatch`)
+- ClickHouse readiness is verified before SQL DDL runs
+
+### 🛠️ Bootstrap Script
+
+Bootstrap logic is encapsulated in [`scripts/bootstrap-clickhouse.sh`](scripts/bootstrap-clickhouse.sh) and safely runs inside GitHub-hosted runners without manual intervention.
+
+## 🗺️ CI/CD Pipeline Diagram
+
+```mermaid
+flowchart TD
+  A[Push to main] --> B[Terraform Apply - Infra]
+  B --> C[Bootstrap ClickHouse]
+  C --> D[Terraform Apply - Post-Deploy]
+
+  B:::job
+  C:::job
+  D:::job
+
+  classDef job fill:#f0f9ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af,font-weight:bold
+```
