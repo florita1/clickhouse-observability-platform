@@ -93,7 +93,7 @@ jobs:
   post-deploy:
     name: Terraform Apply - Post Deploy
     runs-on: ubuntu-latest
-    needs: bootstrap
+    needs: bootstrap-clickhouse
     defaults:
       run:
         working-directory: terraform/environments/dev
