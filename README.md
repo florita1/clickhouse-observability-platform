@@ -131,42 +131,51 @@ Then open:
 
 http://localhost:8123
 
-## ⚙️ Infrastructure Deployment Strategy
+## 🛠️ CI/CD Deployment Strategy
 
-This project uses a multi-phase, GitOps-friendly Terraform CD pipeline via GitHub Actions.
+This project uses a **multi-phase GitHub Actions pipeline** to provision infrastructure, bootstrap components like Prometheus and ClickHouse, and finalize runtime config via Terraform.
 
 ### 🚀 Deployment Phases
 
 | Phase | Description |
 |-------|-------------|
-| **Phase 1 – Infra Apply** | Provisions EKS, IAM, Argo CD, and base infra using `terraform apply` |
-| **Phase 2 – Bootstrap** | Installs Prometheus CRDs, waits for ClickHouse, applies SQL DDL |
-| **Phase 3 – Post-Deploy Apply** | Runs `terraform apply -var="enable_postdeploy=true"` to create ClickHouse users and ingestion-specific config |
-| **Phase 4 – Ingestion Restart** | Restarts ingestion-service to connect with ready ClickHouse instance |
+| **Phase 1 – Infra Apply** | Provisions EKS, IAM, Argo CD, etc. using `terraform apply -var="enable_postdeploy=false"` |
+| **Phase 2 – Prometheus Bootstrap** | Installs Prometheus CRDs and applies Argo CD app via [`scripts/bootstrap-prometheus.sh`](scripts/bootstrap-prometheus.sh) |
+| **Phase 3 – ClickHouse Bootstrap** | Waits for ClickHouse to be ready and applies initial DDL via [`scripts/bootstrap-clickhouse.sh`](scripts/bootstrap-clickhouse.sh) |
+| **Phase 4 – Post Deploy** | Port-forwards ClickHouse to `localhost:8123` via [`scripts/portforward-clickhouse.sh`](scripts/portforward-clickhouse.sh), then runs `terraform apply -var="enable_postdeploy=true"` to configure users/roles, and restarts the ingestion service |
 
-Each phase is defined in `.github/workflows/terraform-cd.yaml` and guarded by stage dependencies.
+Each step runs in a separate GitHub Actions job and is orchestrated via dependencies defined in [`terraform-cd.yaml`](.github/workflows/terraform-cd.yaml).
 
-### 🛡️ Safety Considerations
+---
 
-- Terraform `apply` is restricted to `main` branch
-- Optional manual approval gate for production (`workflow_dispatch`)
-- ClickHouse readiness is verified before SQL DDL runs
+## 🧰 Shell Script Overview
 
-### 🛠️ Bootstrap Script
+| Script | Purpose |
+|--------|---------|
+| [`scripts/bootstrap-prometheus.sh`](scripts/bootstrap-prometheus.sh) | Installs Prometheus CRDs and applies the `apps/prometheus.yaml` manifest |
+| [`scripts/bootstrap-clickhouse.sh`](scripts/bootstrap-clickhouse.sh) | Waits for the ClickHouse pod to be running and applies SQL DDL from [`ddl/init.sql`](ddl/init.sql) |
+| [`scripts/portforward-clickhouse.sh`](scripts/portforward-clickhouse.sh) | Starts a background port-forward to the ClickHouse pod, confirms availability via `curl`, and exits with error if not reachable |
 
-Bootstrap logic is encapsulated in [`scripts/bootstrap-clickhouse.sh`](scripts/bootstrap-clickhouse.sh) and safely runs inside GitHub-hosted runners without manual intervention.
+All scripts are CI-safe and can also be executed locally to simulate end-to-end deploy behavior outside of GitHub Actions.
 
-## 🗺️ CI/CD Pipeline Diagram
+---
+
+## 🗺️ CD Pipeline Diagram
 
 ```mermaid
 flowchart TD
   A[Push to main] --> B[Terraform Apply - Infra]
-  B --> C[Bootstrap ClickHouse]
-  C --> D[Terraform Apply - Post-Deploy]
+  B --> C[Prometheus Bootstrap]
+  B --> D[ClickHouse Bootstrap]
+  C & D --> E[Terraform Apply - Post-Deploy]
+  E --> F[Restart Ingestion Service]
 
   B:::job
   C:::job
   D:::job
+  E:::job
+  F:::job
 
   classDef job fill:#f0f9ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af,font-weight:bold
 ```
+---

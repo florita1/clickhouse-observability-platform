@@ -1,0 +1,129 @@
+name: Terraform CD Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'terraform/**'
+      - 'apps/**'
+      - 'prometheus-crds/**'
+      - 'ddl/**'
+      - 'helm/**'
+      - 'k8s/**'
+      - 'scripts/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  apply-infra:
+    name: Terraform Apply - Infra
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/environments/dev
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.0
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply (enable_postdeploy=false)
+        run: terraform apply -auto-approve -var="enable_postdeploy=false"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  bootstrap-prometheus:
+    name: Prometheus Bootstrap
+    runs-on: ubuntu-latest
+    needs: apply-infra
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: '1.30.0'
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Run Bootstrap Script
+        run: |
+          bash scripts/bootstrap-prometheus.sh
+
+  bootstrap-clickhouse:
+    name: ClickHouse Bootstrap
+    runs-on: ubuntu-latest
+    needs: apply-infra
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: '1.30.0'
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Run Bootstrap Script
+        run: |
+          bash scripts/bootstrap-clickhouse.sh
+
+  post-deploy:
+    name: Terraform Apply - Post Deploy
+    runs-on: ubuntu-latest
+    needs: bootstrap
+    defaults:
+      run:
+        working-directory: terraform/environments/dev
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.0
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Port-forward ClickHouse (via script)
+        run: |
+          chmod +x scripts/portforward-clickhouse.sh
+          ./scripts/portforward-clickhouse.sh
+
+      - name: Terraform Apply (enable_postdeploy = true)
+        run: terraform apply -auto-approve -var="enable_postdeploy=true"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Restart ingestion-service
+        run: |
+          kubectl rollout restart deployment ingestion-service -n ingestion
