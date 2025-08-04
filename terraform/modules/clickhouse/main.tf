@@ -10,8 +10,8 @@ terraform {
 resource "clickhousedbops_user" "user" {
   count = var.enable_postdeploy ? 1 : 0
 
-  name                         = var.user_name
-  password_sha256_hash_wo     = sha256(var.user_password)
+  name                            = var.user_name
+  password_sha256_hash_wo         = sha256(var.user_password)
   password_sha256_hash_wo_version = 1
 }
 

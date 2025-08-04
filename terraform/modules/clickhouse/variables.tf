@@ -40,5 +40,5 @@ variable "admin_password" {
 }
 
 variable "enable_postdeploy" {
-  type        = bool
+  type = bool
 }

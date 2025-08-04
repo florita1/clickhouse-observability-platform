@@ -11,6 +11,6 @@ variable "node_group_role_arn" {
 }
 
 variable "public_subnet_ids" {
-  type = list(string)
+  type        = list(string)
   description = "List of public subnet IDs to be used for EKS cluster, nodes, and Fargate profiles"
 }

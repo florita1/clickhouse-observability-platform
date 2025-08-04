@@ -1,5 +1,5 @@
 output "argocd_server_url" {
-  value = "https://localhost:8080" # For port-forwarded access
+  value       = "https://localhost:8080" # For port-forwarded access
   description = "Argo CD UI URL"
 }
 
