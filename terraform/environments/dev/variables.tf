@@ -7,7 +7,7 @@ variable "az_count" {
 }
 
 variable "tags" {
-  type    = map(string)
+  type = map(string)
   default = {
     Environment = "dev"
   }
@@ -29,7 +29,7 @@ variable "clickhouse_admin_password" {
 }
 
 variable "clickhouse_ingestor_user" {
-  type = string
+  type    = string
   default = "ingestor"
 }
 
