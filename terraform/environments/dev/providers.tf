@@ -17,6 +17,8 @@ provider "helm" {
 }
 
 terraform {
+  required_version = ">= 1.11.0"
+
   required_providers {
     clickhousedbops = {
       version = "1.1.0"
