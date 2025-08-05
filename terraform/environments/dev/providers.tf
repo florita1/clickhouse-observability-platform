@@ -7,7 +7,7 @@ data "aws_eks_cluster_auth" "this" {
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = "${path.module}/kubeconfig.yaml"
 }
 
 provider "helm" {

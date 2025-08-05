@@ -16,7 +16,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
   TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
-  KUBECONFIG: $HOME/.kube/config
+  KUBECONFIG: kubeconfig.yaml
 
 jobs:
   apply-infra:
@@ -28,6 +28,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Create kubeconfig file
+        run: |
+          set -e
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -42,16 +47,7 @@ jobs:
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_user.user[0]' || echo "User state not found"
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_role.role[0]' || echo "Role state not found"
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_privilege.insert[0]' || echo "Grant Privilege state not found"
-          terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_role.user_bind[0]' || echo "Grante Role state not found"
-
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          aws eks update-kubeconfig \
-            --region us-east-1 \
-            --name clickhouse-observability-cluster \
-            --kubeconfig $HOME/.kube/config
-          kubectl get nodes
+          terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_role.user_bind[0]' || echo "Grant Role state not found"
 
       - name: Terraform Apply (enable_postdeploy=false)
         run: terraform apply -auto-approve -var="enable_postdeploy=false"
@@ -69,14 +65,10 @@ jobs:
         with:
           version: '1.30.0'
 
-      - name: Configure kubeconfig
+      - name: Create kubeconfig file
         run: |
-          mkdir -p $HOME/.kube
-          aws eks update-kubeconfig \
-            --region us-east-1 \
-            --name clickhouse-observability-cluster \
-            --kubeconfig $HOME/.kube/config
-          kubectl get nodes
+          set -e
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
 
       - name: Run Bootstrap Script
         run: |
@@ -95,14 +87,10 @@ jobs:
         with:
           version: '1.30.0'
 
-      - name: Configure kubeconfig
+      - name: Create kubeconfig file
         run: |
-          mkdir -p $HOME/.kube
-          aws eks update-kubeconfig \
-            --region us-east-1 \
-            --name clickhouse-observability-cluster \
-            --kubeconfig $HOME/.kube/config
-          kubectl get nodes
+          set -e
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
 
       - name: Run Bootstrap Script
         run: |
@@ -119,19 +107,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create kubeconfig file
+        run: |
+          set -e
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.11.0
-
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          aws eks update-kubeconfig \
-            --region us-east-1 \
-            --name clickhouse-observability-cluster \
-            --kubeconfig $HOME/.kube/config
-          kubectl get nodes
 
       - name: Port-forward ClickHouse (via script)
         run: |
