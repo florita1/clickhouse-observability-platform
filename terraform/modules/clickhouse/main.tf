@@ -36,3 +36,18 @@ resource "clickhousedbops_grant_role" "user_bind" {
   role_name         = length(clickhousedbops_role.role) > 0 ? clickhousedbops_role.role[0].name : ""
   grantee_user_name = length(clickhousedbops_user.user) > 0 ? clickhousedbops_user.user[0].name : ""
 }
+
+resource "kubernetes_secret" "clickhouse_ingestor" {
+  count = var.enable_postdeploy ? 1 : 0
+
+  metadata {
+    name      = "clickhouse-secret"
+    namespace = "ingestion"
+  }
+
+  data = {
+    password = var.user_password
+  }
+
+  type = "Opaque"
+}

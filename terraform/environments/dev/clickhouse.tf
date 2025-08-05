@@ -16,17 +16,3 @@ module "clickhouse" {
 
   enable_postdeploy = var.enable_postdeploy
 }
-
-resource "kubernetes_secret" "clickhouse_ingestor" {
-  metadata {
-    name      = "clickhouse-secret"
-    namespace = "ingestion"
-  }
-
-  data = {
-    password = var.clickhouse_ingestor_password
-  }
-
-  type = "Opaque"
-}
-
