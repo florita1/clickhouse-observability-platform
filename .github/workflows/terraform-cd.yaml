@@ -37,6 +37,9 @@ jobs:
         run: |
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_user.user[0]' || echo "User state not found"
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_role.role[0]' || echo "Role state not found"
+          terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_privilege.insert[0]' || echo "Grant Privilege state not found"
+          terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_role.user_bind[0]' || echo "Grante Role state not found"
+
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
