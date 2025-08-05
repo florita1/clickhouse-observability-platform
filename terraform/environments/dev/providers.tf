@@ -6,9 +6,7 @@ data "aws_eks_cluster_auth" "this" {
   name = module.eks.cluster_name
 }
 
-provider "kubernetes" {
-  config_path = "${path.module}/kubeconfig.yaml"
-}
+provider "kubernetes" {}
 
 provider "helm" {
   kubernetes = {
