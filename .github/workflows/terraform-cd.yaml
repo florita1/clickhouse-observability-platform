@@ -33,6 +33,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Remove stale ClickHouse state (if needed)
+        run: |
+          terraform state rm -lock=false 'module.clickhouse.clickhousedbops_user.user[0]' || echo "User state not found"
+          terraform state rm -lock=false 'module.clickhouse.clickhousedbops_role.role[0]' || echo "Role state not found"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Terraform Apply (enable_postdeploy=false)
         run: terraform apply -auto-approve -var="enable_postdeploy=false"
         env:
