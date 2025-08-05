@@ -114,7 +114,7 @@ jobs:
 
       - name: Port-forward ClickHouse (via script)
         run: |
-          chmod +x scripts/portforward-clickhouse.sh
+          chmod +x ./scripts/portforward-clickhouse.sh
           ./scripts/portforward-clickhouse.sh
 
       - name: Terraform Apply (enable_postdeploy = true)
