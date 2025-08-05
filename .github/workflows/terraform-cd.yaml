@@ -16,7 +16,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
   TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
-  KUBECONFIG: $HOME/.kube/config
+  KUBECONFIG: /github/home/.kube/config
 
 jobs:
   apply-infra:
@@ -46,7 +46,11 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+          mkdir -p /github/home/.kube
+          aws eks update-kubeconfig \
+            --region us-east-1 \
+            --name clickhouse-observability-cluster \
+            --kubeconfig /github/home/.kube/config
           kubectl get nodes
 
       - name: Terraform Apply (enable_postdeploy=false)
@@ -67,7 +71,11 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+          mkdir -p /github/home/.kube
+          aws eks update-kubeconfig \
+            --region us-east-1 \
+            --name clickhouse-observability-cluster \
+            --kubeconfig /github/home/.kube/config
           kubectl get nodes
 
       - name: Run Bootstrap Script
@@ -89,7 +97,11 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+          mkdir -p /github/home/.kube
+          aws eks update-kubeconfig \
+            --region us-east-1 \
+            --name clickhouse-observability-cluster \
+            --kubeconfig /github/home/.kube/config
           kubectl get nodes
 
       - name: Run Bootstrap Script
@@ -114,7 +126,11 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
+          mkdir -p /github/home/.kube
+          aws eks update-kubeconfig \
+            --region us-east-1 \
+            --name clickhouse-observability-cluster \
+            --kubeconfig /github/home/.kube/config
           kubectl get nodes
 
       - name: Port-forward ClickHouse (via script)
