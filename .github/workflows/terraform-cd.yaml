@@ -18,6 +18,11 @@ jobs:
     defaults:
       run:
         working-directory: terraform/environments/dev
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
+      TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v4
@@ -29,9 +34,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Remove stale ClickHouse state (if needed)
         run: |
@@ -40,22 +42,19 @@ jobs:
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_privilege.insert[0]' || echo "Grant Privilege state not found"
           terraform state rm -lock=false 'module.clickhouse.clickhousedbops_grant_role.user_bind[0]' || echo "Grante Role state not found"
 
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Configure kubeconfig
+        run: aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
 
       - name: Terraform Apply (enable_postdeploy=false)
         run: terraform apply -auto-approve -var="enable_postdeploy=false"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
-          TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
 
   bootstrap-prometheus:
     name: Prometheus Bootstrap
     runs-on: ubuntu-latest
     needs: apply-infra
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
       - uses: actions/checkout@v4
@@ -66,20 +65,18 @@ jobs:
           version: '1.30.0'
 
       - name: Configure kubeconfig
-        run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
 
       - name: Run Bootstrap Script
-        run: |
-          bash scripts/bootstrap-prometheus.sh
+        run: bash scripts/bootstrap-prometheus.sh
 
   bootstrap-clickhouse:
     name: ClickHouse Bootstrap
     runs-on: ubuntu-latest
     needs: apply-infra
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
       - uses: actions/checkout@v4
@@ -90,15 +87,10 @@ jobs:
           version: '1.30.0'
 
       - name: Configure kubeconfig
-        run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
 
       - name: Run Bootstrap Script
-        run: |
-          bash scripts/bootstrap-clickhouse.sh
+        run: bash scripts/bootstrap-clickhouse.sh
 
   post-deploy:
     name: Terraform Apply - Post Deploy
@@ -107,6 +99,11 @@ jobs:
     defaults:
       run:
         working-directory: terraform/environments/dev
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
+      TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v4
@@ -117,11 +114,7 @@ jobs:
           terraform_version: 1.11.0
 
       - name: Configure kubeconfig
-        run: |
-          aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: aws eks update-kubeconfig --region us-east-1 --name clickhouse-observability-cluster
 
       - name: Port-forward ClickHouse (via script)
         run: |
@@ -130,12 +123,6 @@ jobs:
 
       - name: Terraform Apply (enable_postdeploy = true)
         run: terraform apply -auto-approve -var="enable_postdeploy=true"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
-          TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
 
       - name: Restart ingestion-service
-        run: |
-          kubectl rollout restart deployment ingestion-service -n ingestion
+        run: kubectl rollout restart deployment ingestion-service -n ingestion
