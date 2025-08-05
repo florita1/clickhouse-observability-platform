@@ -5,12 +5,6 @@ on:
     branches: [main]
     paths:
       - 'terraform/**'
-      - 'apps/**'
-      - 'prometheus-crds/**'
-      - 'ddl/**'
-      - 'helm/**'
-      - 'k8s/**'
-      - 'scripts/**'
   workflow_dispatch:
 
 permissions:
@@ -44,6 +38,8 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
+          TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
 
   bootstrap-prometheus:
     name: Prometheus Bootstrap
@@ -126,6 +122,8 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
+          TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
 
       - name: Restart ingestion-service
         run: |
