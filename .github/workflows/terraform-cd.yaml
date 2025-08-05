@@ -16,7 +16,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_clickhouse_admin_password: ${{ secrets.CLICKHOUSE_ADMIN_PASSWORD }}
   TF_VAR_clickhouse_ingestor_password: ${{ secrets.CLICKHOUSE_INGESTOR_PASSWORD }}
-  KUBECONFIG: kubeconfig.yaml
 
 jobs:
   apply-infra:
@@ -31,8 +30,8 @@ jobs:
 
       - name: Create kubeconfig file
         run: |
-          set -e
-          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > $HOME/.kube/config
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -67,8 +66,8 @@ jobs:
 
       - name: Create kubeconfig file
         run: |
-          set -e
-          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > $HOME/.kube/config
 
       - name: Run Bootstrap Script
         run: |
@@ -89,8 +88,8 @@ jobs:
 
       - name: Create kubeconfig file
         run: |
-          set -e
-          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > $HOME/.kube/config
 
       - name: Run Bootstrap Script
         run: |
@@ -109,8 +108,8 @@ jobs:
 
       - name: Create kubeconfig file
         run: |
-          set -e
-          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > kubeconfig.yaml
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > $HOME/.kube/config
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
