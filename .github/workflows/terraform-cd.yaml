@@ -68,7 +68,7 @@ jobs:
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > $HOME/.kube/config
 
       - name: Run Bootstrap Script
-        run: bash ../../../scripts/portforward-clickhouse.sh
+        run: bash scripts/bootstrap-prometheus.sh
 
   bootstrap-clickhouse:
     name: ClickHouse Bootstrap
@@ -114,7 +114,7 @@ jobs:
         run: ls -la && ls -la scripts
 
       - name: Port-forward ClickHouse (via script)
-        run: bash scripts/portforward-clickhouse.sh
+        run: bash ../../../scripts/portforward-clickhouse.sh
 
       - name: Terraform Apply (enable_postdeploy = true)
         run: terraform apply -auto-approve -var="enable_postdeploy=true"
