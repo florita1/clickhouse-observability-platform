@@ -104,7 +104,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "rate(otelcol_exporter_sent_spans{exporter=\"otlp/tempo\"}[1m])",
+          "expr": "rate(otelcol_exporter_sent_spans_total{exporter=\"otlp/tempo\"}[1m])",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -196,7 +196,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "rate(otel_receiver_accepted_spans[1m])",
+          "expr": "rate(otelcol_receiver_accepted_spans_total[1m])",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
