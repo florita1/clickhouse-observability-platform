@@ -110,9 +110,6 @@ jobs:
         with:
           terraform_version: 1.11.0
 
-      - name: List current files for debugging
-        run: ls -la && ls -la scripts
-
       - name: Port-forward ClickHouse (via script)
         run: bash ../../../scripts/portforward-clickhouse.sh
 
