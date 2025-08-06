@@ -110,6 +110,9 @@ jobs:
         with:
           terraform_version: 1.11.0
 
+      - name: Terraform Init
+        run: terraform init -reconfigure
+
       - name: Port-forward ClickHouse (via script)
         run: bash ../../../scripts/portforward-clickhouse.sh
 
