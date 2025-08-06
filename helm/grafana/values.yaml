@@ -670,17 +670,27 @@ datasources:
         access: proxy
         url: http://prometheus-kube-prometheus-prometheus.observability.svc.cluster.local:9090
         isDefault: true
+        editable: true
 
       - name: Loki
         type: loki
         access: proxy
         url: http://loki.observability.svc.cluster.local:3100
         isDefault: false
+        editable: true
+        jsonData:
+          derivedFields:
+            - name: trace_id
+              matcherRegex: 'trace_id=(\w+)'
+              url: '/explore?left={"datasource":"Tempo","queries":[{"query":"$1"}]}'
+              datasourceUid: tempo
 
       - name: Tempo
         type: tempo
         access: proxy
         url: http://tempo.observability.svc.cluster.local:3200
+        isDefault: false
+        editable: true
 #  datasources.yaml:
 #    apiVersion: 1
 #    datasources:
@@ -849,14 +859,12 @@ defaultCurlOptions: "-skf"
 ##
 dashboards:
   default:
-    logging-dashboard-via-loki-v2:
-      file: dashboards/logging-dashboard-via-loki-v2.json
-    loki-dashboard:
-      file: dashboards/loki-dashboard.json
-#    node-exporter-full:
-#      file: dashboards/node-exporter-full.json
-    otel-tempo:
-      file: dashboards/otel-tempo.json
+    ingestion-service-metrics:
+      file: dashboards/ingestion-service-metrics.json
+    tempo-traces:
+      file: dashboards/tempo-traces.json
+    logs:
+      file: dashboards/logs.json
   # default:
   #   some-dashboard:
   #     json: |

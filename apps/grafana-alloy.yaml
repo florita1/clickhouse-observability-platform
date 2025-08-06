@@ -122,10 +122,23 @@ spec:
             - name: otlp-http
               port: 4318
               targetPort: 4318
+            - name: metrics
+              port: 12345
+              targetPort: 12345
 
         service:
           enabled: true
           type: ClusterIP
+          ports:
+            - name: metrics
+              port: 12345
+              targetPort: 12345
+        
+        serviceMonitor:
+          enabled: true
+          interval: 15s
+          additionalLabels:
+            release: prometheus
   syncPolicy:
     automated:
       selfHeal: true
