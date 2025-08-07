@@ -682,7 +682,7 @@ datasources:
           derivedFields:
             - name: trace_id
               matcherRegex: 'trace_id=(\w+)'
-              url: '/explore?left={"datasource":"Tempo","queries":[{"query":"$1"}]}'
+              url: '/explore?left=["now-5m","now","Tempo",{"query":"trace_id=\"$1\""}]'
               datasourceUid: Tempo
 
       - name: Tempo
