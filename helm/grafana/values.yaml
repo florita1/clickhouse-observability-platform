@@ -683,7 +683,7 @@ datasources:
             - name: trace_id
               matcherRegex: 'trace_id=(\w+)'
               url: '/explore?left={"datasource":"Tempo","queries":[{"query":"$1"}]}'
-              datasourceUid: tempo
+              datasourceUid: Tempo
 
       - name: Tempo
         type: tempo
