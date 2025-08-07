@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
+  "id": 4,
   "links": [],
   "panels": [
     {
@@ -31,8 +31,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 19,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -57,7 +57,7 @@
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{job=\"ingestion-service\", trace_id=\"$trace_id\"}",
+          "expr": "{job=\"ingestion/ingestion-service\"} |= \"$trace_id\"",
           "queryType": "range",
           "refId": "A"
         }
