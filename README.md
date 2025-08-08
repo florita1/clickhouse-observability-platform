@@ -21,16 +21,16 @@ This project provisions a real-time observability stack built on AWS, EKS, Terra
 
 This project uses a mix of Helm management styles across Argo CD apps to reflect real-world patterns:
 
-| Component       | Helm Strategy           | Notes                                                                 |
-|------------------|--------------------------|-----------------------------------------------------------------------|
-| **ClickHouse**    | Altinity CRDs            | Managed via `ClickHouseInstallation` custom resource (not Helm)       |
-| **Grafana**       | Vendored Helm Chart      | Forked and customized inside `helm/grafana/`                          |
-| **Grafana Alloy** | Upstream Helm            | Installed via `grafana/alloy` chart directly                          |
-| **Ingestion**     | From-Scratch Helm Chart  | Custom-built chart under `helm/ingestion-service/`                   |
-| **Loki**          | Vendored Helm Chart      | Pulled into repo and configured via `helm/loki/`                      |
-| **Prometheus**    | Upstream Helm            | Managed with official `prometheus-community/kube-prometheus-stack`   |
-| **Tempo**         | Upstream Helm            | Installed from Grafana's upstream Helm chart                         |
-| **Promtail**      | Upstream Helm (Optional) | Included but not deployed; logs go Alloy → Loki                      |
+| Component             | Helm Strategy           | Notes                                                                 |
+|-----------------------|--------------------------|-----------------------------------------------------------------------|
+| **ClickHouse**        | Altinity CRDs            | Managed via `ClickHouseInstallation` custom resource (not Helm)       |
+| **Grafana**           | Vendored Helm Chart      | Forked and customized inside `helm/grafana/`                          |
+| **Grafana Alloy**     | Upstream Helm            | Installed via `grafana/alloy` chart directly                          |
+| **Ingestion Service** | From-Scratch Helm Chart  | Custom-built chart under `helm/ingestion-service/`                   |
+| **Loki**              | Vendored Helm Chart      | Pulled into repo and configured via `helm/loki/`                      |
+| **Prometheus**        | Upstream Helm            | Managed with official `prometheus-community/kube-prometheus-stack`   |
+| **Tempo**             | Upstream Helm            | Installed from Grafana's upstream Helm chart                         |
+| **Promtail**          | Upstream Helm (Optional) | Included but not deployed; logs go Alloy → Loki                      |
 
 > This strategy shows how to mix upstream charts, custom charts, and CRDs while keeping everything GitOps-managed via Argo CD.
 
@@ -321,21 +321,11 @@ A -->|Traces| C(Grafana Alloy)
 A -->|Logs| C
 C --> D[Tempo]
 C --> E[Loki]
-A -->|Metrics| F[Prometheus]
+F[Prometheus] -->|Scrapes| A
 F --> G[Grafana Metrics Dashboard]
 E --> H[Grafana Logs Dashboard]
 D --> I[Grafana Traces Dashboard]
 B --> J[Grafana ClickHouse Metrics Panel]
-```
-graph TD
-A[Ingestion Service] -->|HTTP Insert + OTEL| B(ClickHouse)
-A -->|Traces| C(Grafana Alloy)
-A -->|Logs| C
-C --> D[Tempo]
-C --> E[Loki]
-E --> F[Grafana Logs Dashboard]
-D --> G[Grafana Traces Dashboard]
-B --> H[Grafana ClickHouse Metrics Panel]
 ```
 
 ---
