@@ -321,6 +321,18 @@ A -->|Traces| C(Grafana Alloy)
 A -->|Logs| C
 C --> D[Tempo]
 C --> E[Loki]
+A -->|Metrics| F[Prometheus]
+F --> G[Grafana Metrics Dashboard]
+E --> H[Grafana Logs Dashboard]
+D --> I[Grafana Traces Dashboard]
+B --> J[Grafana ClickHouse Metrics Panel]
+```
+graph TD
+A[Ingestion Service] -->|HTTP Insert + OTEL| B(ClickHouse)
+A -->|Traces| C(Grafana Alloy)
+A -->|Logs| C
+C --> D[Tempo]
+C --> E[Loki]
 E --> F[Grafana Logs Dashboard]
 D --> G[Grafana Traces Dashboard]
 B --> H[Grafana ClickHouse Metrics Panel]
