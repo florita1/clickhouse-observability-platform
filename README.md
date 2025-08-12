@@ -9,8 +9,8 @@ This project provisions a real-time observability stack built on AWS, EKS, Terra
 | Workflow     | Status                                                                                                                 |
 |--------------|------------------------------------------------------------------------------------------------------------------------|
 | Terraform    | ![Terraform](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/terraform.yaml/badge.svg) |
-| Helm Charts  | ![Helm](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/helm.yaml/badge.svg)           |
-| Argo CD      | ![Argo CD](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/argocd.yaml/badge.svg)      |
+| Helm Charts  | ![Helm](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/argocd.yaml/badge.svg)          |
+| Argo CD      | ![Argo CD](https://github.com/florita1/clickhouse-observability-platform/actions/workflows/argocd.yaml/badge.svg)   _Proof:_ see `/screenshots/github-actions-terraform-cd.png` for a successful Terraform CD run.   |
 
 
 ---
@@ -116,6 +116,11 @@ argocd app sync promtail
 
 > Promtail is included as an optional Argo CD application. Logs are routed directly from Alloy to Loki.
 
+### Argo CD Applications (Healthy)
+All platform apps are synced and healthy in the Argo CD UI. _See screenshot: `/screenshots/argocd-ui.png`._
+
+
+
 ### 4️⃣ Bootstrap ClickHouse
 
 ```bash
@@ -129,6 +134,11 @@ argocd app sync promtail
 terraform apply -auto-approve -var="enable_postdeploy=true"
 kubectl rollout restart deployment ingestion-service -n ingestion
 ```
+
+
+### Ingestion Service Startup
+Boot sequence shows OTEL exporters and Prometheus metrics initialized. _See screenshot: `/screenshots/ingestion-service-startup.png`._
+
 
 ---
 
@@ -189,6 +199,11 @@ px ui
 
 Opens [https://work.pixielabs.ai](https://work.pixielabs.ai) in your browser.
 
+### Pixie Cluster View
+Service map and live traffic captured via eBPF. _See screenshot: `/screenshots/pixie-ui-cluster.png`._
+
+
+
 ---
 
 ## 🧪 Accessing ClickHouse + Table Schema
@@ -240,6 +255,19 @@ curl -s 'http://localhost:8123/?query=SELECT%20*%20FROM%20events_db.events%20LIM
 
 > This assumes your `events` table was created inside the `events_db` database (as defined in `ddl/init.sql`).
 
+
+### Deployment Verification: ClickHouseInstallation (CHI)
+Confirm ClickHouse is live via the Altinity operator:
+
+```bash
+kubectl get chi -n clickhouse
+```
+
+Expected output
+```
+NAMESPACE    NAME         CLUSTERS   HOSTS   STATUS      HOSTS-COMPLETED   AGE   SUSPEND
+clickhouse   clickhouse   1          1       Completed                     27d   
+```
 
 ## 📦 Remote State with S3 and DynamoDB
 
@@ -310,6 +338,18 @@ Dashboards are baked into `helm/grafana/dashboards/`:
 
 > Linked drilldowns between traces ↔ logs ↔ metrics included.
 
+### Example Dashboards
+- Metrics: `/screenshots/metrics-dashboard.png`
+- Logs: `/screenshots/log-dashboard.png`
+- Traces: `/screenshots/traces-dashboard.png`
+
+### Logs & Trace Linking
+Loki derived fields extract trace IDs and link directly into Tempo for span exploration.
+- Derived field config: `/screenshots/loki-derived-field.png`
+- Trace drilldown from Loki → Tempo: `/screenshots/trace-link-from-loki.png`
+
+
+
 ---
 
 ## 🔁 Data Flow Overview
@@ -374,3 +414,20 @@ Each phase is orchestrated via `.github/workflows/terraform-cd.yaml`.
 | `portforward-clickhouse.sh` | Port-forward + availability test for ClickHouse             |
 
 ---
+---
+
+## 📸 Screenshot Gallery
+
+All screenshots are stored in the `/screenshots` directory for quick browsing.
+
+| File Name | Description |
+|-----------|-------------|
+| `ingestion-service-startup.png` | Ingestion service logs showing startup sequence and CDC mode initialization |
+| `pixie-ui-cluster.png` | Pixie UI cluster topology diagram with real-time traffic visualization |
+| `loki-derived-field-config.png` | Grafana Loki derived field configuration linking logs to Tempo traces |
+| `loki-to-tempo-trace-link.png` | Direct trace link from Loki logs into Tempo UI |
+| `argocd-ui.png` | Argo CD Applications view — all components healthy |
+| `github-actions-terraform-cd.png` | Successful Terraform GitHub Actions CI/CD pipeline run |
+| `grafana-logs-dashboard.png` | Grafana logs dashboard showing ingestion service logs |
+| `grafana-metrics-dashboard.png` | Grafana metrics dashboard with ingestion performance and system metrics |
+| `grafana-traces-dashboard.png` | Grafana traces dashboard with end-to-end trace data |
